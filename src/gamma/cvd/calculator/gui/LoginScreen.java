@@ -1,12 +1,7 @@
 package gamma.cvd.calculator.gui;
 
-import gamma.cvd.calculator.launcher;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -21,26 +16,11 @@ public class LoginScreen extends javax.swing.JFrame
     public LoginScreen()
     {
         initComponents();
-        setNativeGuiStyle(); 
         
-        // Center login screen
-        this.setLocationRelativeTo(null);
-    }
-    
-    /* 
-        Set the Swing style to the native OS style - Will typically set it to windows style. Preferrable over Nimbus. 
-    */
-    private void setNativeGuiStyle() 
-    {
-                 try 
-                 {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                 } 
-                 catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) 
-                 {
-                     Logger.getLogger(launcher.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-             
+        GuiUtils.setNativeGuiStyle(this);
+        
+        // Center screen
+        GuiUtils.centerScreen(this);
     }
     
 
@@ -58,7 +38,7 @@ public class LoginScreen extends javax.swing.JFrame
         lblLoginUsername = new javax.swing.JLabel();
         lblLoginPassword = new javax.swing.JLabel();
         btnLogin = new javax.swing.JButton();
-        btnRegister = new javax.swing.JButton();
+        btnAccessRegistration = new javax.swing.JButton();
         txtLoginPassword = new javax.swing.JPasswordField();
         imgLoginIcon = new javax.swing.JLabel();
 
@@ -82,10 +62,24 @@ public class LoginScreen extends javax.swing.JFrame
 
         btnLogin.setText("Login");
         btnLogin.setName("btnLogin"); // NOI18N
+        btnLogin.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
-        btnRegister.setText("Register");
-        btnRegister.setActionCommand("btnRegister");
-        btnRegister.setName("btnRegister"); // NOI18N
+        btnAccessRegistration.setText("Register");
+        btnAccessRegistration.setActionCommand("btnRegister");
+        btnAccessRegistration.setName("btnAccessRegistration"); // NOI18N
+        btnAccessRegistration.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnAccessRegistrationActionPerformed(evt);
+            }
+        });
 
         txtLoginPassword.setName("txtLoginPassword"); // NOI18N
 
@@ -100,7 +94,7 @@ public class LoginScreen extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAccessRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -134,7 +128,7 @@ public class LoginScreen extends javax.swing.JFrame
                     .addComponent(txtLoginPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegister)
+                    .addComponent(btnAccessRegistration)
                     .addComponent(btnLogin))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -147,10 +141,29 @@ public class LoginScreen extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLoginUsernameActionPerformed
 
+    private void btnAccessRegistrationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAccessRegistrationActionPerformed
+    {//GEN-HEADEREND:event_btnAccessRegistrationActionPerformed
+        
+        // Display error if username & password fields have no characters (Does not check for spaces)
+        if (txtLoginUsername.getText().isEmpty() || txtLoginPassword.getPassword().length == 0)
+        {
+            JOptionPane.showMessageDialog(this, "Please fill the correct fields in with your desired username and password", "Insufficient Details", JOptionPane.ERROR_MESSAGE);          
+        }
+        else
+        {
+             new RegistrationPromptScreen().setVisible(true);    
+        }
+    }//GEN-LAST:event_btnAccessRegistrationActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoginActionPerformed
+    {//GEN-HEADEREND:event_btnLoginActionPerformed
+        // Make login call here, load main menu if succesful.
+    }//GEN-LAST:event_btnLoginActionPerformed
+
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAccessRegistration;
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton btnRegister;
     private javax.swing.JLabel imgLoginIcon;
     private javax.swing.JLabel lblLoginPassword;
     private javax.swing.JLabel lblLoginUsername;
