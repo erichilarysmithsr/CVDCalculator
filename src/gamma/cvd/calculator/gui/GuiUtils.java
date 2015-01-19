@@ -15,7 +15,7 @@ public class GuiUtils
 {
     
     // Changes Swing style to native Operating System Style
-    static void setNativeGuiStyle(JFrame screen)
+    public static void setNativeGuiStyle(JFrame screen)
     {
         try
         {
@@ -27,7 +27,7 @@ public class GuiUtils
     }
     
     // Centers screen in center of display
-    static void centerScreen(JFrame screen)
+    public static void centerScreen(JFrame screen)
     {
         screen.setLocationRelativeTo(null);
     }

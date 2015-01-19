@@ -1,6 +1,6 @@
 package gamma.cvd.calculator;
 
-import gamma.cvd.calculator.gui.LoginScreen;
+import gamma.cvd.calculator.gui.login.LoginScreen;
 
 /**
  *

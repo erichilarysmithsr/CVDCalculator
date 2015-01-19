@@ -1,5 +1,7 @@
-package gamma.cvd.calculator.gui;
+package gamma.cvd.calculator.gui.login;
 
+import gamma.cvd.calculator.gui.GuiUtils;
+import gamma.cvd.calculator.gui.menu.MainMenuScreen;
 import javax.swing.JOptionPane;
 
 
@@ -17,10 +19,13 @@ public class LoginScreen extends javax.swing.JFrame
     {
         initComponents();
         
+       
         GuiUtils.setNativeGuiStyle(this);
         
         // Center screen
         GuiUtils.centerScreen(this);
+                GuiUtils.setNativeGuiStyle(this);
+
     }
     
 
@@ -147,7 +152,7 @@ public class LoginScreen extends javax.swing.JFrame
         // Display error if username & password fields have no characters (Does not check for spaces)
         if (txtLoginUsername.getText().isEmpty() || txtLoginPassword.getPassword().length == 0)
         {
-            JOptionPane.showMessageDialog(this, "Please fill the correct fields in with your desired username and password", "Insufficient Details", JOptionPane.ERROR_MESSAGE);          
+            JOptionPane.showMessageDialog(this, "Please fill the correct fields in with your desired username and password", "Insufficient Details", JOptionPane.WARNING_MESSAGE);          
         }
         else
         {
@@ -157,7 +162,17 @@ public class LoginScreen extends javax.swing.JFrame
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoginActionPerformed
     {//GEN-HEADEREND:event_btnLoginActionPerformed
-        // Make login call here, load main menu if succesful.
+        boolean loginIsValid = true; 
+        
+        if (!loginIsValid)
+        {
+            JOptionPane.showMessageDialog(this, "Incorrect username/password combination used, please enter your correct username and password", "Invalid Login", JOptionPane.WARNING_MESSAGE);          
+        }
+        else
+        {
+            dispose();
+            new MainMenuScreen().setVisible(true);            
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
    

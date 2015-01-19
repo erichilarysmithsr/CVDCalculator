@@ -1,5 +1,6 @@
-package gamma.cvd.calculator.gui;
+package gamma.cvd.calculator.gui.login;
 
+import gamma.cvd.calculator.gui.GuiUtils;
 import javax.swing.JOptionPane;
 
 /**
