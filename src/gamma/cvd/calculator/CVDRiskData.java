@@ -1,4 +1,4 @@
-package cvdcalculator;
+package gamma.cvd.calculator;
 
 import java.time.LocalDate;
 

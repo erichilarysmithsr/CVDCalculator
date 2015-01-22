@@ -27,7 +27,8 @@ public class CalculatorScreen extends javax.swing.JFrame
         initComponents();
         
         addListeners();
-            }
+        addMeasurementSelections();
+    }
     
     private void addListeners()
     {
@@ -145,9 +146,16 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         sliderLdl.setValue(0);
 
-        lblLdl.setText("LDL-C (mg/dl)");
+        lblLdl.setText("LDL-C");
 
         txtLdl.setText("0");
+        txtLdl.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtLdlActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelLdlLayout = new javax.swing.GroupLayout(panelLdl);
         panelLdl.setLayout(panelLdlLayout);
@@ -244,7 +252,7 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         sliderHdl.setValue(0);
 
-        lblHdl.setText("HDL-C (mg/dl)");
+        lblHdl.setText("HDL-C");
 
         txtHdl.setText("0");
 
@@ -277,7 +285,7 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         sliderCholesterol.setValue(0);
 
-        lblCholesterol.setText("Cholesterol (mm/dl)");
+        lblCholesterol.setText("Cholesterol");
 
         txtCholesterol.setText("0");
         txtCholesterol.setToolTipText("");
@@ -425,6 +433,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
+    private void txtLdlActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtLdlActionPerformed
+    {//GEN-HEADEREND:event_txtLdlActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLdlActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -499,4 +512,9 @@ public class CalculatorScreen extends javax.swing.JFrame
     private javax.swing.JTextField txtHdl;
     private javax.swing.JTextField txtLdl;
     // End of variables declaration//GEN-END:variables
+
+    private void addMeasurementSelections()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

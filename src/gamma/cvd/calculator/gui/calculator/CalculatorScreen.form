@@ -172,13 +172,16 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblLdl">
               <Properties>
-                <Property name="text" type="java.lang.String" value="LDL-C (mg/dl)"/>
+                <Property name="text" type="java.lang.String" value="LDL-C"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtLdl">
               <Properties>
                 <Property name="text" type="java.lang.String" value="0"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtLdlActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -334,7 +337,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblHdl">
               <Properties>
-                <Property name="text" type="java.lang.String" value="HDL-C (mg/dl)"/>
+                <Property name="text" type="java.lang.String" value="HDL-C"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtHdl">
@@ -388,7 +391,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lblCholesterol">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cholesterol (mm/dl)"/>
+                <Property name="text" type="java.lang.String" value="Cholesterol"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCholesterol">
