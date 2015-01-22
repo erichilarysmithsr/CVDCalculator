@@ -30,6 +30,9 @@ public class CVDRiskData {
     private boolean isSmoker;
     private LocalDate testDate;
 
+    public CVDRiskData() {}
+    
+    // Constructor for MmolL cholesterol & MmolL HDL
     public CVDRiskData(char sex, int age, String cholesterolType,
             float cholesterolMmolL, float hdlMmolL,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -77,6 +80,7 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
     
+    // Constructor for MgDl cholesterol & MmolL HDL
     public CVDRiskData(char sex, int age, String cholesterolType, 
             int cholesterolMgDl, float hdlMmolL,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -124,6 +128,7 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
     
+    // Constructor for MmolL cholesterol & MgDl HDL
     public CVDRiskData(char sex, int age, String cholesterolType,
             float cholesterolMmolL, int hdlMgDl,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -171,6 +176,7 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
     
+    // Constructor for MgDl cholesterol & MgDl HDL
     public CVDRiskData(char sex, int age, String cholesterolType, 
             int cholesterolMgDl, int hdlMgDl,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
