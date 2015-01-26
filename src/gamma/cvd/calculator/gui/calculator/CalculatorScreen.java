@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gamma.cvd.calculator.gui.calculator;
 
 import gamma.cvd.calculator.CVDRiskData;
@@ -155,6 +150,8 @@ public class CalculatorScreen extends javax.swing.JFrame
         {
             JOptionPane.showMessageDialog(this, "Both LDL-C and Cholesterol values entered, please only fill one field", "Argument Exception", JOptionPane.ERROR_MESSAGE);
             cholesterolMeasurement = MGDL_MEASUREMENT;
+            cholesterolValue = Integer.parseInt(txtLdl.getText());
+            cholesterolType = CVDRiskData.LDL;
         } else if (!txtLdl.getText().equals("0"))
         {
             cholesterolType = CVDRiskData.LDL;
