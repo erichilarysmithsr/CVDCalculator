@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
@@ -47,10 +48,9 @@ public class CalculatorScreen extends javax.swing.JFrame
         addTextChangeListener(sliderHdl, txtHdl);
         addTextChangeListener(sliderLdl, txtLdl);
 
-        addRadioListeners(radioGenderMale);
-        addRadioListeners(radioGenderFemale);
-        addRadioListeners(radioDiabetes);
-        addRadioListeners(radioSmoker);
+
+        addRadioListeners(checkboxDiabetes);
+        addRadioListeners(checkboxSmoker);
         
         addComboChangeListener(comboBloodPressureType);
         addComboChangeListener(comboCholesterolMeasurement);
@@ -59,9 +59,9 @@ public class CalculatorScreen extends javax.swing.JFrame
         
     }
 
-    private void addRadioListeners(JRadioButton radioButton)
+    private void addRadioListeners(JCheckBox checkbox)
     {
-        radioButton.addActionListener(new ActionListener()
+        checkbox.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -127,8 +127,8 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         model.setBloodPressure(bloodPressureSystolicMmHg, bloodPressureDiastolicMmHg);
         model.setAge(Integer.parseInt(txtAge.getText()));
-        model.setIsDiabetic(radioDiabetes.isSelected());
-        model.setIsSmoker(radioSmoker.isSelected());
+        model.setIsDiabetic(checkboxDiabetes.isSelected());
+        model.setIsSmoker(checkboxSmoker.isSelected());
         if (radioGenderFemale.isSelected())
         {
             model.setFemale();
@@ -145,14 +145,14 @@ public class CalculatorScreen extends javax.swing.JFrame
         {
             model.setHdlMmolL(Integer.parseInt(txtHdl.getText()));
         }
-
         if (!txtLdl.getText().equals("0") && !txtCholesterol.getText().equals("0"))
         {
             JOptionPane.showMessageDialog(this, "Both LDL-C and Cholesterol values entered, please only fill one field", "Argument Exception", JOptionPane.ERROR_MESSAGE);
             cholesterolMeasurement = MGDL_MEASUREMENT;
             cholesterolValue = Integer.parseInt(txtLdl.getText());
             cholesterolType = CVDRiskData.LDL;
-        } else if (!txtLdl.getText().equals("0"))
+        }
+        else if (!txtLdl.getText().equals("0"))
         {
             cholesterolType = CVDRiskData.LDL;
             cholesterolValue = Integer.parseInt(txtLdl.getText());
@@ -236,8 +236,6 @@ public class CalculatorScreen extends javax.swing.JFrame
         sliderAge = new javax.swing.JSlider();
         lblAge = new javax.swing.JLabel();
         txtAge = new javax.swing.JTextField();
-        radioDiabetes = new javax.swing.JRadioButton();
-        radioSmoker = new javax.swing.JRadioButton();
         lblCvdTenYearRisk = new javax.swing.JLabel();
         lblCvdRisk = new javax.swing.JLabel();
         btnSaveResult = new javax.swing.JButton();
@@ -254,6 +252,8 @@ public class CalculatorScreen extends javax.swing.JFrame
         lblBloodPressure = new javax.swing.JLabel();
         txtBloodPressure = new javax.swing.JTextField();
         comboBloodPressureType = new javax.swing.JComboBox();
+        checkboxSmoker = new javax.swing.JCheckBox();
+        checkboxDiabetes = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -396,17 +396,6 @@ public class CalculatorScreen extends javax.swing.JFrame
                     .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        radioDiabetes.setText("Diabetes");
-
-        radioSmoker.setText("Smoker");
-        radioSmoker.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                radioSmokerActionPerformed(evt);
-            }
-        });
-
         lblCvdTenYearRisk.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
         lblCvdTenYearRisk.setText("10 Year CVD Risk");
 
@@ -500,6 +489,24 @@ public class CalculatorScreen extends javax.swing.JFrame
                         .addComponent(comboBloodPressureType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
+        checkboxSmoker.setText("Smoker");
+        checkboxSmoker.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                checkboxSmokerActionPerformed(evt);
+            }
+        });
+
+        checkboxDiabetes.setText("Diabetes");
+        checkboxDiabetes.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                checkboxDiabetesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelCalculatorLayout = new javax.swing.GroupLayout(panelCalculator);
         panelCalculator.setLayout(panelCalculatorLayout);
         panelCalculatorLayout.setHorizontalGroup(
@@ -521,18 +528,22 @@ public class CalculatorScreen extends javax.swing.JFrame
                             .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(panelBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSaveResult, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCvdTenYearRisk, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
-                                .addComponent(lblCvdRisk)
-                                .addGap(58, 58, 58))
                             .addGroup(panelCalculatorLayout.createSequentialGroup()
-                                .addComponent(radioDiabetes)
+                                .addGap(38, 38, 38)
+                                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnSaveResult, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCvdTenYearRisk, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
+                                        .addComponent(lblCvdRisk)
+                                        .addGap(58, 58, 58)))
+                                .addGap(0, 2, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(checkboxDiabetes)
                                 .addGap(18, 18, 18)
-                                .addComponent(radioSmoker)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(checkboxSmoker)))))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         panelCalculatorLayout.setVerticalGroup(
             panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -543,10 +554,14 @@ public class CalculatorScreen extends javax.swing.JFrame
                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioGenderMale)
                     .addComponent(radioGenderFemale))
+                .addGap(14, 14, 14)
+                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(checkboxSmoker)
+                        .addComponent(checkboxDiabetes)))
                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCalculatorLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panelBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -554,11 +569,7 @@ public class CalculatorScreen extends javax.swing.JFrame
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCalculatorLayout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(radioDiabetes)
-                            .addComponent(radioSmoker))
-                        .addGap(28, 28, 28)
+                        .addGap(25, 25, 25)
                         .addComponent(lblCvdTenYearRisk)
                         .addGap(8, 8, 8)
                         .addComponent(lblCvdRisk)
@@ -573,7 +584,7 @@ public class CalculatorScreen extends javax.swing.JFrame
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 473, Short.MAX_VALUE)
+            .addGap(0, 470, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -601,11 +612,6 @@ public class CalculatorScreen extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void radioSmokerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_radioSmokerActionPerformed
-    {//GEN-HEADEREND:event_radioSmokerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioSmokerActionPerformed
-
     private void txtLdlActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtLdlActionPerformed
     {//GEN-HEADEREND:event_txtLdlActionPerformed
         // TODO add your handling code here:
@@ -615,6 +621,16 @@ public class CalculatorScreen extends javax.swing.JFrame
     {//GEN-HEADEREND:event_comboCholesterolMeasurementActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboCholesterolMeasurementActionPerformed
+
+    private void checkboxSmokerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_checkboxSmokerActionPerformed
+    {//GEN-HEADEREND:event_checkboxSmokerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkboxSmokerActionPerformed
+
+    private void checkboxDiabetesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_checkboxDiabetesActionPerformed
+    {//GEN-HEADEREND:event_checkboxDiabetesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkboxDiabetesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -663,6 +679,8 @@ public class CalculatorScreen extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSaveResult;
+    private javax.swing.JCheckBox checkboxDiabetes;
+    private javax.swing.JCheckBox checkboxSmoker;
     private javax.swing.JComboBox comboBloodPressureType;
     private javax.swing.JComboBox comboCholesterolMeasurement;
     private javax.swing.JComboBox comboHdlcMeasurement;
@@ -682,10 +700,8 @@ public class CalculatorScreen extends javax.swing.JFrame
     private javax.swing.JPanel panelCholesterol;
     private javax.swing.JPanel panelHdl;
     private javax.swing.JPanel panelLdl;
-    private javax.swing.JRadioButton radioDiabetes;
     private javax.swing.JRadioButton radioGenderFemale;
     private javax.swing.JRadioButton radioGenderMale;
-    private javax.swing.JRadioButton radioSmoker;
     private javax.swing.JSlider sliderAge;
     private javax.swing.JSlider sliderBloodPressure;
     private javax.swing.JSlider sliderCholesterol;
