@@ -6,7 +6,18 @@
 package gamma.cvd.calculator.gui.calculator;
 
 import gamma.cvd.calculator.CVDRiskData;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.LayoutManager;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JProgressBar;
+import javax.swing.OverlayLayout;
 
 /**
  *
@@ -19,6 +30,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
     {
         initComponents();
         DisplayHealthTips(model);
+        DisplayHeart(model);
     }
 
     /**
@@ -32,6 +44,11 @@ public class PatientSummaryScreen extends javax.swing.JFrame
     {
 
         panelRiskSummary = new javax.swing.JPanel();
+        lblRiskSummary = new javax.swing.JLabel();
+        lblTenYearLikelihood = new javax.swing.JLabel();
+        lblAvgRisk = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lblYouAre = new javax.swing.JLabel();
         panelTips = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtTips = new javax.swing.JEditorPane();
@@ -41,18 +58,57 @@ public class PatientSummaryScreen extends javax.swing.JFrame
 
         panelRiskSummary.setBorder(javax.swing.BorderFactory.createTitledBorder("Risk"));
 
+        lblRiskSummary.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblRiskSummary.setText("Risk Placeholder");
+
+        lblTenYearLikelihood.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblTenYearLikelihood.setText("<html>Likely to develop a heart disease<br>\nwithin the next  <u>10 Years</u>");
+
+        lblAvgRisk.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblAvgRisk.setText("<html>The average % risk for your<br> age group is: <u>0%</u>");
+
+        jLabel1.setText("Heart Placeholder");
+
+        lblYouAre.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
+        lblYouAre.setText("You Are...");
+
         javax.swing.GroupLayout panelRiskSummaryLayout = new javax.swing.GroupLayout(panelRiskSummary);
         panelRiskSummary.setLayout(panelRiskSummaryLayout);
         panelRiskSummaryLayout.setHorizontalGroup(
             panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 353, Short.MAX_VALUE)
+            .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblRiskSummary)))
+                    .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel1))
+                    .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(lblYouAre)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         panelRiskSummaryLayout.setVerticalGroup(
             panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblRiskSummary)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblYouAre)
+                .addGap(68, 68, 68)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
         );
 
-        panelTips.setBorder(javax.swing.BorderFactory.createTitledBorder("Tips"));
+        panelTips.setBorder(javax.swing.BorderFactory.createTitledBorder("Tips to improve your score"));
 
         txtTips.setEditable(false);
         txtTips.setContentType("text/html"); // NOI18N
@@ -62,16 +118,16 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         panelTips.setLayout(panelTipsLayout);
         panelTipsLayout.setHorizontalGroup(
             panelTipsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTipsLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
         );
         panelTipsLayout.setVerticalGroup(
             panelTipsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -79,15 +135,18 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(panelRiskSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTips, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelTips, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelRiskSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(panelTips, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelTips, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelRiskSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -95,7 +154,12 @@ public class PatientSummaryScreen extends javax.swing.JFrame
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblAvgRisk;
+    private javax.swing.JLabel lblRiskSummary;
+    private javax.swing.JLabel lblTenYearLikelihood;
+    private javax.swing.JLabel lblYouAre;
     private javax.swing.JPanel panelRiskSummary;
     private javax.swing.JPanel panelTips;
     private javax.swing.JEditorPane txtTips;
@@ -108,7 +172,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         final double HDL_LOWER_BOUND = 1.30;
         final double DIASTOLIC_BP_UPPER_BOUND = 84;
         final String NEW_LINE = "<br>";
-        final String HTML_FONT  = "<font face=\"calibri\">";
+        final String HTML_FONT = "<font face=\"calibri\">";
 
         StringBuilder healthTips = new StringBuilder();
         // Enable HTML formatting
@@ -120,26 +184,25 @@ public class PatientSummaryScreen extends javax.swing.JFrame
             healthTips.append("<b><u>Cholesterol tips</u></b>");
             healthTips.append(NEW_LINE);
             healthTips.append(LoadHealthTips(new ArrayList<>()));
-        } 
-        else if (model.getCholesterolMmolL() > CHOLESTEROL_UPPER_BOUND)
+        } else if (model.getCholesterolMmolL() > CHOLESTEROL_UPPER_BOUND)
         {
             healthTips.append("<b><u>Cholesterol tips</u></b>");
             healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));            
+            healthTips.append(LoadHealthTips(new ArrayList<>()));
         }
 
         if (model.getHdlMmolL() < HDL_LOWER_BOUND)
         {
             healthTips.append("<b><u>HDL tips</u></b>");
             healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));            
+            healthTips.append(LoadHealthTips(new ArrayList<>()));
         }
 
         if (model.getBloodPressureDiastolicMmHg() > DIASTOLIC_BP_UPPER_BOUND)
         {
             healthTips.append("<b><u>Blood Pressure Tips</u></b>");
             healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));           
+            healthTips.append(LoadHealthTips(new ArrayList<>()));
         }
 
         if (model.isIsDiabetic())
@@ -157,17 +220,17 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         }
 
         healthTips.append("</font>");
-        
+
         txtTips.setText(healthTips.toString());
 
     }
 
     private String LoadHealthTips(ArrayList<String> tips)
     {
-        StringBuilder healthTips = new StringBuilder(); 
+        StringBuilder healthTips = new StringBuilder();
         final String NEW_LINE = "<br>";
 
-        for (String line: tips)
+        for (String line : tips)
         {
             if (line != null && !line.isEmpty())
             {
@@ -176,7 +239,84 @@ public class PatientSummaryScreen extends javax.swing.JFrame
                 healthTips.append(NEW_LINE);
             }
         }
-        
+
         return healthTips.toString();
     }
+
+    private void DisplayHeart(CVDRiskData model)
+    {   
+        Integer averageRisk = getAverageRisk(model.getAge());
+        lblAvgRisk.setText(lblAvgRisk.getText().replace("0%", Integer.toString(averageRisk) + "%"));
+        
+        Integer patientRisk = model.getRiskPercentage(model.calculateRiskScore());
+        
+        if (patientRisk > averageRisk+1)
+        {
+            lblRiskSummary.setForeground(Color.RED);
+            lblRiskSummary.setText("Above average risk");
+        }            
+        
+        if (patientRisk < averageRisk+1 && patientRisk > averageRisk-1)
+        {
+           lblRiskSummary.setForeground(Color.YELLOW);
+           lblRiskSummary.setText("Average risk");
+        }
+        
+        if (patientRisk < averageRisk-1)
+        {
+            lblRiskSummary.setForeground(Color.GREEN);
+            lblRiskSummary.setText("Below average risk");
+        }
+    }
+    
+    private int getAverageRisk(int age)
+    {        
+        if (age >= 30 && age <= 34)
+        {
+            return 3;
+        }
+        
+        if (age >= 35 && age <= 39)
+        {
+            return 5; 
+        }
+        
+        if (age >= 40 && age <= 44)
+        {
+            return 7; 
+        }
+        
+        if (age >= 45 && age <= 49)
+        {
+            return 11; 
+        }
+        
+        if (age >= 50 && age <= 54)
+        {
+            return 14; 
+        }
+        
+        if (age >= 55 && age <= 59)
+        {
+            return 16; 
+        }
+  
+        if (age >= 60 && age <= 64)
+        {
+            return 21; 
+        }
+        
+        if (age >= 65 && age <= 69)
+        {
+            return 25; 
+        }
+        
+        if (age >= 70)
+        {
+            return 30; 
+        }
+        
+        return 0;
+    }
+    
 }
