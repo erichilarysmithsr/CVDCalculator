@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JProgressBar;
 import javax.swing.OverlayLayout;
 
@@ -30,7 +32,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
     {
         initComponents();
         DisplayHealthTips(model);
-        DisplayHeart(model);
+        DisplaySummary(model);
     }
 
     /**
@@ -47,7 +49,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         lblRiskSummary = new javax.swing.JLabel();
         lblTenYearLikelihood = new javax.swing.JLabel();
         lblAvgRisk = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        imgRiskSummary = new javax.swing.JLabel();
         lblYouAre = new javax.swing.JLabel();
         panelTips = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -67,7 +69,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         lblAvgRisk.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblAvgRisk.setText("<html>The average % risk for your<br> age group is: <u>0%</u>");
 
-        jLabel1.setText("Heart Placeholder");
+        imgRiskSummary.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jack\\Documents\\GitHub\\CVDCalculator\\resources\\icons\\calculatorStaticHearts\\heart1pct.png")); // NOI18N
 
         lblYouAre.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         lblYouAre.setText("You Are...");
@@ -79,33 +81,35 @@ public class PatientSummaryScreen extends javax.swing.JFrame
             .addGroup(panelRiskSummaryLayout.createSequentialGroup()
                 .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(34, 34, 34)
+                        .addGap(45, 45, 45)
                         .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblRiskSummary)))
+                            .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jLabel1))
+                        .addGap(22, 22, 22)
+                        .addComponent(imgRiskSummary))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(lblYouAre)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addGap(112, 112, 112)
+                        .addComponent(lblYouAre))
+                    .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(lblRiskSummary)))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         panelRiskSummaryLayout.setVerticalGroup(
             panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRiskSummaryLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblRiskSummary)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
                 .addComponent(lblYouAre)
-                .addGap(68, 68, 68)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(imgRiskSummary)
                 .addGap(18, 18, 18)
+                .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panelTips.setBorder(javax.swing.BorderFactory.createTitledBorder("Tips to improve your score"));
@@ -120,14 +124,14 @@ public class PatientSummaryScreen extends javax.swing.JFrame
             panelTipsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))
         );
         panelTipsLayout.setVerticalGroup(
             panelTipsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTipsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -154,7 +158,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel imgRiskSummary;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAvgRisk;
     private javax.swing.JLabel lblRiskSummary;
@@ -243,7 +247,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         return healthTips.toString();
     }
 
-    private void DisplayHeart(CVDRiskData model)
+    private void DisplaySummary(CVDRiskData model)
     {   
         Integer averageRisk = getAverageRisk(model.getAge());
         lblAvgRisk.setText(lblAvgRisk.getText().replace("0%", Integer.toString(averageRisk) + "%"));
@@ -267,6 +271,8 @@ public class PatientSummaryScreen extends javax.swing.JFrame
             lblRiskSummary.setForeground(Color.GREEN);
             lblRiskSummary.setText("Below average risk");
         }
+        
+        imgRiskSummary.setIcon(loadCorrectIcon(patientRisk));
     }
     
     private int getAverageRisk(int age)
@@ -317,6 +323,74 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         }
         
         return 0;
+    }
+
+    private Icon loadCorrectIcon(Integer risk)
+    {
+        final String WORK_DIR = System.getProperty("user.dir");
+        final String ICON_DIR = "/resources/icons/calculatorStaticHearts/"; 
+        if (risk == 2)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart2pct.png"); 
+        }
+        else if (risk == 3)
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart3pct.png");            
+        }
+        else if (risk == 4)
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart4pct.png");            
+        }
+        else if (risk == 5 ||  risk == 6)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart6pct.png");             
+        }
+        else if (risk == 7 || risk == 8)
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart7pct.png");            
+        }
+        else if (risk == 9 || risk == 10)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart9pct.png");             
+        }
+        else if (risk >= 11 && risk < 14)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart11pct.png");           
+        }
+        else if (risk >= 14 && risk <= 17)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart14pct.png");             
+        }
+        else if (risk >= 18 && risk <= 21 )
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart18pct.png");            
+        }
+        else if (risk >= 22 && risk <= 26)
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart22pct.png");            
+        }
+        else if (risk >= 27 && risk <= 32)
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart27pct.png");            
+        }
+        else if (risk >= 33 && risk <= 39)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart33pct.png");             
+        }
+        else if (risk >= 40 && risk <= 46)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart40pct.png");             
+        }
+        else if (risk >= 46 && risk <= 55)
+        {
+            return new ImageIcon(WORK_DIR+ICON_DIR+"heart47pct.png");             
+        }
+        else if (risk > 56)
+        {
+             return new ImageIcon(WORK_DIR+ICON_DIR+"heart56pct.png");            
+        }
+           
+        return new ImageIcon(WORK_DIR+ICON_DIR+"heart1pct.png"); 
     }
     
 }
