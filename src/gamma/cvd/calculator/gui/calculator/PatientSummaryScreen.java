@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  *
@@ -17,12 +18,13 @@ import javax.swing.ImageIcon;
  */
 public class PatientSummaryScreen extends javax.swing.JFrame
 {
-
     PatientSummaryScreen(CVDRiskData model)
     {
         initComponents();
         DisplayHealthTips(model);
         DisplaySummary(model);
+        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**

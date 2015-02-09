@@ -618,7 +618,7 @@ public class CalculatorScreen extends javax.swing.JFrame
 
     private void btnSummaryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSummaryActionPerformed
     {//GEN-HEADEREND:event_btnSummaryActionPerformed
-                new PatientSummaryScreen(model).setVisible(true);  
+        new PatientSummaryScreen(model).setVisible(true);  
     }//GEN-LAST:event_btnSummaryActionPerformed
 
     /**
