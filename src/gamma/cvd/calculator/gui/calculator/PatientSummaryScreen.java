@@ -7,19 +7,9 @@ package gamma.cvd.calculator.gui.calculator;
 
 import gamma.cvd.calculator.CVDRiskData;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.LayoutManager;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JProgressBar;
-import javax.swing.OverlayLayout;
 
 /**
  *
@@ -385,7 +375,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         {
             return new ImageIcon(WORK_DIR+ICON_DIR+"heart47pct.png");             
         }
-        else if (risk > 56)
+        else if (risk >= 56)
         {
              return new ImageIcon(WORK_DIR+ICON_DIR+"heart56pct.png");            
         }
