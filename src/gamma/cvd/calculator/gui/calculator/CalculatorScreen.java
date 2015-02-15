@@ -8,7 +8,6 @@ import java.awt.event.KeyListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -21,6 +20,8 @@ import javax.swing.event.ChangeListener;
  */
 public class CalculatorScreen extends javax.swing.JFrame
 {
+    private CVDRiskData model = new CVDRiskData();
+
 
     /**
      * Creates new form CalculatorScreen
@@ -120,8 +121,6 @@ public class CalculatorScreen extends javax.swing.JFrame
     
     private void calculateCvdRisk()
     {
-        CVDRiskData model = new CVDRiskData();
-
         final String SYSTOLIC = "Systolic";
         final String MGDL_MEASUREMENT = "mg/dl";
 
@@ -261,10 +260,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         comboBloodPressureType = new javax.swing.JComboBox();
         checkboxSmoker = new javax.swing.JCheckBox();
         checkboxDiabetes = new javax.swing.JCheckBox();
+        btnSummary = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("NHS CVD Calculator - New Patient");
+        setTitle("NHS CVD Calculator");
 
         panelCalculator.setBorder(javax.swing.BorderFactory.createTitledBorder("CVD Calculator"));
 
@@ -484,6 +484,15 @@ public class CalculatorScreen extends javax.swing.JFrame
             }
         });
 
+        btnSummary.setText("Patient Summary");
+        btnSummary.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnSummaryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelCalculatorLayout = new javax.swing.GroupLayout(panelCalculator);
         panelCalculator.setLayout(panelCalculatorLayout);
         panelCalculatorLayout.setHorizontalGroup(
@@ -507,7 +516,7 @@ public class CalculatorScreen extends javax.swing.JFrame
                             .addComponent(panelBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(checkboxDiabetes)
                                 .addGap(18, 18, 18)
                                 .addComponent(checkboxSmoker))
@@ -518,8 +527,10 @@ public class CalculatorScreen extends javax.swing.JFrame
                                     .addComponent(lblCvdTenYearRisk, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
                                         .addComponent(lblCvdRisk)
-                                        .addGap(58, 58, 58)))))))
-                .addGap(12, 12, 12))
+                                        .addGap(58, 58, 58))
+                                    .addComponent(btnSummary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 2, Short.MAX_VALUE)))))
+                .addGap(10, 10, 10))
         );
         panelCalculatorLayout.setVerticalGroup(
             panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -549,8 +560,10 @@ public class CalculatorScreen extends javax.swing.JFrame
                         .addComponent(lblCvdTenYearRisk)
                         .addGap(8, 8, 8)
                         .addComponent(lblCvdRisk)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSaveResult)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSaveResult)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSummary)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -603,6 +616,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_checkboxDiabetesActionPerformed
 
+    private void btnSummaryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSummaryActionPerformed
+    {//GEN-HEADEREND:event_btnSummaryActionPerformed
+        new PatientSummaryScreen(model).setVisible(true);  
+    }//GEN-LAST:event_btnSummaryActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -650,6 +668,7 @@ public class CalculatorScreen extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSaveResult;
+    private javax.swing.JButton btnSummary;
     private javax.swing.JCheckBox checkboxDiabetes;
     private javax.swing.JCheckBox checkboxSmoker;
     private javax.swing.JComboBox comboBloodPressureType;
