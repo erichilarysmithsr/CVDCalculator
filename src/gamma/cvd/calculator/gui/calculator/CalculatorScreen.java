@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.LocalDate;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -20,7 +21,7 @@ import javax.swing.event.ChangeListener;
  */
 public class CalculatorScreen extends javax.swing.JFrame
 {
-    private CVDRiskData model = new CVDRiskData();
+    private CVDRiskData model;
 
 
     /**
@@ -38,13 +39,13 @@ public class CalculatorScreen extends javax.swing.JFrame
     {
         // Add listeners to update text field to corresponding slider value upon slider change. 
         addSliderChangeListener(sliderAge, txtAge);
-        addSliderChangeListener(sliderBloodPressure, txtBloodPressure);
+        addSliderChangeListener(sliderBloodPressureDiastolic, txtBloodPressureDiastolic);
         addSliderChangeListener(sliderCholesterol, txtCholesterol);
         addSliderChangeListener(sliderHdl, txtHdl);
 
         // Add listeners to update slider upon entering value corresponding in text field
         addTextChangeListener(sliderAge, txtAge);
-        addTextChangeListener(sliderBloodPressure, txtBloodPressure);
+        addTextChangeListener(sliderBloodPressureDiastolic, txtBloodPressureDiastolic);
         addTextChangeListener(sliderCholesterol, txtCholesterol);
         addTextChangeListener(sliderHdl, txtHdl);
 
@@ -57,7 +58,6 @@ public class CalculatorScreen extends javax.swing.JFrame
         addRadioChangeListener(radioCholesterol);
         addRadioChangeListener(radioLdlC);
         
-        addComboChangeListener(comboBloodPressureType);
         addComboChangeListener(comboCholesterolMeasurement);
         addComboChangeListener(comboHdlcMeasurement);
         
@@ -121,49 +121,38 @@ public class CalculatorScreen extends javax.swing.JFrame
     
     private void calculateCvdRisk()
     {
-        final String SYSTOLIC = "Systolic";
         final String MGDL_MEASUREMENT = "mg/dl";
+        final String MMOL_MEASUREMENT = "mmol/L";
 
-        int bloodPressureSystolicMmHg = 0;
-        int bloodPressureDiastolicMmHg = 0;
+        int bloodPressureSystolicMmHg;
+        int bloodPressureDiastolicMmHg;
 
-        String cholesterolType = null;
-        String cholesterolMeasurement = null;
-        int cholesterolValue = 0;
+        String cholesterolType;
+        String cholesterolMeasurement;
+        String hdlMeasurement;
+        float cholesterolMmolL;
+        float hdlMmolL;
+        int cholesterolMgDl;
+        int hdlMgDl;
+        int age;
+        char sex;
+        boolean isDiabetic;
+        boolean isSmoker;
 
-        // Check if blood pressure type is Systolic or Diastolic
-        if (comboBloodPressureType.getSelectedItem().toString().equals(SYSTOLIC))
-        {
-            bloodPressureSystolicMmHg = Integer.parseInt(txtBloodPressure.getText());
-        } else
-        {
-            bloodPressureDiastolicMmHg = Integer.parseInt(txtBloodPressure.getText());
-        }
-
-        model.setBloodPressure(bloodPressureSystolicMmHg, bloodPressureDiastolicMmHg);
-        model.setAge(Integer.parseInt(txtAge.getText()));
-        model.setIsDiabetic(checkboxDiabetes.isSelected());
-        model.setIsSmoker(checkboxSmoker.isSelected());
+        cholesterolMeasurement =
+                comboCholesterolMeasurement.getSelectedItem().toString();
+        hdlMeasurement = comboHdlcMeasurement.getSelectedItem().toString();
+        
         if (radioGenderFemale.isSelected())
         {
-            model.setFemale();
+            sex = CVDRiskData.FEMALE;
         } else
         {
-            model.setMale();
-        }
-
-        // Check if measurement is set to Mg/DL or not - set appropriate value.
-        if (comboHdlcMeasurement.getSelectedItem().toString().equals(MGDL_MEASUREMENT))
-        {
-            model.setHdlMgDl(Integer.parseInt(txtHdl.getText()));
-        } else
-        {
-            model.setHdlMmolL(Integer.parseInt(txtHdl.getText()));
+            sex = CVDRiskData.MALE;
         }
         
-        cholesterolValue = Integer.parseInt(txtCholesterol.getText());
-        cholesterolMeasurement = comboCholesterolMeasurement.getSelectedItem().toString();
-            
+        age = Integer.parseInt(txtAge.getText());
+        
         if (radioLdlC.isSelected())
         {
             cholesterolType = CVDRiskData.LDL;
@@ -172,19 +161,60 @@ public class CalculatorScreen extends javax.swing.JFrame
         {
             cholesterolType = CVDRiskData.CHOL;
         }
-
-        if (cholesterolMeasurement.equals(MGDL_MEASUREMENT))
-        {
-            model.setCholesterolMgDl(cholesterolType, cholesterolValue);
-        } else
-        {
-            model.setCholesterolMmolL(cholesterolType, cholesterolValue);
+        
+        bloodPressureSystolicMmHg =
+                Integer.parseInt(txtBloodPressureSystolic.getText());
+        bloodPressureDiastolicMmHg =
+                Integer.parseInt(txtBloodPressureDiastolic.getText());
+        
+        isDiabetic = checkboxDiabetes.isSelected();
+        isSmoker = checkboxSmoker.isSelected();
+        
+        if (cholesterolMeasurement.equals(MMOL_MEASUREMENT) &&
+                hdlMeasurement.equals(MMOL_MEASUREMENT)) {
+            cholesterolMmolL = Float.parseFloat(txtCholesterol.getText());
+            hdlMmolL = Float.parseFloat(txtHdl.getText());
+            model = new CVDRiskData(sex, age, cholesterolType, cholesterolMmolL,
+                    hdlMmolL, bloodPressureSystolicMmHg,
+                    bloodPressureDiastolicMmHg, isDiabetic, isSmoker,
+                    LocalDate.now());
+            Integer score = model.calculateRiskScore();
+            Integer risk = model.getRiskPercentage(score);
+            lblCvdRisk.setText(risk.toString() + "%");
+        } else if (cholesterolMeasurement.equals(MGDL_MEASUREMENT) &&
+                hdlMeasurement.equals(MMOL_MEASUREMENT)) {
+            cholesterolMgDl = Integer.parseInt(txtCholesterol.getText());
+            hdlMmolL = Float.parseFloat(txtHdl.getText());
+            model = new CVDRiskData(sex, age, cholesterolType, cholesterolMgDl,
+                    hdlMmolL, bloodPressureSystolicMmHg,
+                    bloodPressureDiastolicMmHg, isDiabetic, isSmoker,
+                    LocalDate.now());
+            Integer score = model.calculateRiskScore();
+            Integer risk = model.getRiskPercentage(score);
+            lblCvdRisk.setText(risk.toString() + "%");
+        } else if (cholesterolMeasurement.equals(MMOL_MEASUREMENT) &&
+                hdlMeasurement.equals(MGDL_MEASUREMENT)) {
+            cholesterolMmolL = Float.parseFloat(txtCholesterol.getText());
+            hdlMgDl = Integer.parseInt(txtHdl.getText());
+            model = new CVDRiskData(sex, age, cholesterolType, cholesterolMmolL,
+                    hdlMgDl, bloodPressureSystolicMmHg,
+                    bloodPressureDiastolicMmHg, isDiabetic, isSmoker,
+                    LocalDate.now());
+            Integer score = model.calculateRiskScore();
+            Integer risk = model.getRiskPercentage(score);
+            lblCvdRisk.setText(risk.toString() + "%");
+        } else if (cholesterolMeasurement.equals(MGDL_MEASUREMENT) &&
+                hdlMeasurement.equals(MGDL_MEASUREMENT)) {
+            cholesterolMgDl = Integer.parseInt(txtCholesterol.getText());
+            hdlMgDl = Integer.parseInt(txtHdl.getText());
+            model = new CVDRiskData(sex, age, cholesterolType, cholesterolMgDl,
+                    hdlMgDl, bloodPressureSystolicMmHg,
+                    bloodPressureDiastolicMmHg, isDiabetic, isSmoker,
+                    LocalDate.now());
+            Integer score = model.calculateRiskScore();
+            Integer risk = model.getRiskPercentage(score);
+            lblCvdRisk.setText(risk.toString() + "%");
         }
-
-        Integer score = model.calculateRiskScore();
-        Integer risk = model.getRiskPercentage(score);
-        lblCvdRisk.setText(risk.toString() + "%");
-
     }
 
     // Upon entering new text into a text field, will update the corresponding slider to that position
@@ -227,8 +257,7 @@ public class CalculatorScreen extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         panelCalculator = new javax.swing.JPanel();
         panelLdl = new javax.swing.JPanel();
@@ -245,22 +274,25 @@ public class CalculatorScreen extends javax.swing.JFrame
         lblCvdTenYearRisk = new javax.swing.JLabel();
         lblCvdRisk = new javax.swing.JLabel();
         btnSaveResult = new javax.swing.JButton();
+        radioGenderMale = new javax.swing.JRadioButton();
+        radioGenderFemale = new javax.swing.JRadioButton();
+        lblGender = new javax.swing.JLabel();
+        checkboxSmoker = new javax.swing.JCheckBox();
+        checkboxDiabetes = new javax.swing.JCheckBox();
+        btnSummary = new javax.swing.JButton();
+        panelBloodPressureDiastolic = new javax.swing.JPanel();
+        sliderBloodPressureDiastolic = new javax.swing.JSlider();
+        lblBloodPressureDiastolic = new javax.swing.JLabel();
+        txtBloodPressureDiastolic = new javax.swing.JTextField();
         panelHdl = new javax.swing.JPanel();
         sliderHdl = new javax.swing.JSlider();
         lblHdl = new javax.swing.JLabel();
         txtHdl = new javax.swing.JTextField();
         comboHdlcMeasurement = new javax.swing.JComboBox();
-        radioGenderMale = new javax.swing.JRadioButton();
-        radioGenderFemale = new javax.swing.JRadioButton();
-        lblGender = new javax.swing.JLabel();
-        panelBloodPressure = new javax.swing.JPanel();
-        sliderBloodPressure = new javax.swing.JSlider();
-        lblBloodPressure = new javax.swing.JLabel();
-        txtBloodPressure = new javax.swing.JTextField();
-        comboBloodPressureType = new javax.swing.JComboBox();
-        checkboxSmoker = new javax.swing.JCheckBox();
-        checkboxDiabetes = new javax.swing.JCheckBox();
-        btnSummary = new javax.swing.JButton();
+        panelBloodPressureSystolic = new javax.swing.JPanel();
+        sliderBloodPressureSystolic = new javax.swing.JSlider();
+        lblBloodPressureSystolic = new javax.swing.JLabel();
+        txtBloodPressureSystolic = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -276,10 +308,8 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         comboCholesterolMeasurement.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "mg/dl", "mmol/L" }));
         comboCholesterolMeasurement.setToolTipText("");
-        comboCholesterolMeasurement.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        comboCholesterolMeasurement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboCholesterolMeasurementActionPerformed(evt);
             }
         });
@@ -325,7 +355,7 @@ public class CalculatorScreen extends javax.swing.JFrame
                         .addComponent(radioCholesterol)
                         .addGap(20, 20, 20)
                         .addComponent(radioLdlC)))
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panelLdlLayout.setVerticalGroup(
             panelLdlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,7 +366,7 @@ public class CalculatorScreen extends javax.swing.JFrame
                     .addComponent(radioLdlC))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelCholesterol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(136, 136, 136))
         );
 
         sliderAge.setMaximum(140);
@@ -381,6 +411,65 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         btnSaveResult.setText("Save Result");
 
+        radioGenderMale.setText("Male");
+
+        radioGenderFemale.setText("Female");
+
+        lblGender.setText("Gender");
+
+        checkboxSmoker.setText("Smoker");
+        checkboxSmoker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkboxSmokerActionPerformed(evt);
+            }
+        });
+
+        checkboxDiabetes.setText("Diabetes");
+        checkboxDiabetes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkboxDiabetesActionPerformed(evt);
+            }
+        });
+
+        btnSummary.setText("Patient Summary");
+        btnSummary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSummaryActionPerformed(evt);
+            }
+        });
+
+        sliderBloodPressureDiastolic.setMaximum(200);
+        sliderBloodPressureDiastolic.setValue(0);
+
+        lblBloodPressureDiastolic.setText("Blood Pressure Diastolic (mm Hg)");
+
+        txtBloodPressureDiastolic.setText("0");
+
+        javax.swing.GroupLayout panelBloodPressureDiastolicLayout = new javax.swing.GroupLayout(panelBloodPressureDiastolic);
+        panelBloodPressureDiastolic.setLayout(panelBloodPressureDiastolicLayout);
+        panelBloodPressureDiastolicLayout.setHorizontalGroup(
+            panelBloodPressureDiastolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBloodPressureDiastolicLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBloodPressureDiastolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBloodPressureDiastolicLayout.createSequentialGroup()
+                        .addComponent(sliderBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblBloodPressureDiastolic))
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        panelBloodPressureDiastolicLayout.setVerticalGroup(
+            panelBloodPressureDiastolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBloodPressureDiastolicLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblBloodPressureDiastolic)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBloodPressureDiastolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sliderBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
         sliderHdl.setMaximum(70);
         sliderHdl.setValue(0);
 
@@ -422,76 +511,37 @@ public class CalculatorScreen extends javax.swing.JFrame
                         .addComponent(comboHdlcMeasurement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
-        radioGenderMale.setText("Male");
+        sliderBloodPressureSystolic.setMaximum(200);
+        sliderBloodPressureSystolic.setValue(0);
 
-        radioGenderFemale.setText("Female");
+        lblBloodPressureSystolic.setText("Blood Pressure Systolic (mm Hg)");
 
-        lblGender.setText("Gender");
+        txtBloodPressureSystolic.setText("0");
 
-        sliderBloodPressure.setMaximum(200);
-        sliderBloodPressure.setValue(0);
-
-        lblBloodPressure.setText("Blood Pressure (mm Hg)");
-
-        txtBloodPressure.setText("0");
-
-        comboBloodPressureType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Systolic", "Diastolic" }));
-
-        javax.swing.GroupLayout panelBloodPressureLayout = new javax.swing.GroupLayout(panelBloodPressure);
-        panelBloodPressure.setLayout(panelBloodPressureLayout);
-        panelBloodPressureLayout.setHorizontalGroup(
-            panelBloodPressureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBloodPressureLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelBloodPressureSystolicLayout = new javax.swing.GroupLayout(panelBloodPressureSystolic);
+        panelBloodPressureSystolic.setLayout(panelBloodPressureSystolicLayout);
+        panelBloodPressureSystolicLayout.setHorizontalGroup(
+            panelBloodPressureSystolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBloodPressureSystolicLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelBloodPressureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBloodPressureLayout.createSequentialGroup()
-                        .addComponent(sliderBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBloodPressureSystolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBloodPressureSystolicLayout.createSequentialGroup()
+                        .addComponent(sliderBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblBloodPressure))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(comboBloodPressureType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(txtBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblBloodPressureSystolic))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
-        panelBloodPressureLayout.setVerticalGroup(
-            panelBloodPressureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBloodPressureLayout.createSequentialGroup()
+        panelBloodPressureSystolicLayout.setVerticalGroup(
+            panelBloodPressureSystolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBloodPressureSystolicLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblBloodPressure)
+                .addComponent(lblBloodPressureSystolic)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBloodPressureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sliderBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelBloodPressureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(comboBloodPressureType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(panelBloodPressureSystolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sliderBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
-
-        checkboxSmoker.setText("Smoker");
-        checkboxSmoker.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                checkboxSmokerActionPerformed(evt);
-            }
-        });
-
-        checkboxDiabetes.setText("Diabetes");
-        checkboxDiabetes.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                checkboxDiabetesActionPerformed(evt);
-            }
-        });
-
-        btnSummary.setText("Patient Summary");
-        btnSummary.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnSummaryActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelCalculatorLayout = new javax.swing.GroupLayout(panelCalculator);
         panelCalculator.setLayout(panelCalculatorLayout);
@@ -510,61 +560,60 @@ public class CalculatorScreen extends javax.swing.JFrame
                     .addGroup(panelCalculatorLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(checkboxDiabetes)
-                                .addGap(18, 18, 18)
-                                .addComponent(checkboxSmoker))
-                            .addGroup(panelCalculatorLayout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnSaveResult, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblCvdTenYearRisk, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
-                                        .addComponent(lblCvdRisk)
-                                        .addGap(58, 58, 58))
-                                    .addComponent(btnSummary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 2, Short.MAX_VALUE)))))
-                .addGap(10, 10, 10))
+                            .addComponent(checkboxDiabetes)
+                            .addComponent(panelBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(checkboxSmoker))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panelCalculatorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56)
+                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSaveResult, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCvdTenYearRisk, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCalculatorLayout.createSequentialGroup()
+                        .addComponent(lblCvdRisk)
+                        .addGap(58, 58, 58))
+                    .addComponent(btnSummary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 56, Short.MAX_VALUE))
         );
         panelCalculatorLayout.setVerticalGroup(
             panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCalculatorLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblGender)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioGenderMale)
                     .addComponent(radioGenderFemale))
                 .addGap(14, 14, 14)
+                .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(checkboxSmoker)
-                        .addComponent(checkboxDiabetes)))
-                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelCalculatorLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(panelBloodPressure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelCalculatorLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelCalculatorLayout.createSequentialGroup()
                         .addComponent(lblCvdTenYearRisk)
                         .addGap(8, 8, 8)
                         .addComponent(lblCvdRisk)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSaveResult)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSummary)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnSummary))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelCalculatorLayout.createSequentialGroup()
+                        .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(checkboxDiabetes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(checkboxSmoker))))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Patient History"));
@@ -573,11 +622,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 462, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 620, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -586,15 +635,15 @@ public class CalculatorScreen extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelCalculator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(437, 437, 437)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelCalculator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -671,18 +720,19 @@ public class CalculatorScreen extends javax.swing.JFrame
     private javax.swing.JButton btnSummary;
     private javax.swing.JCheckBox checkboxDiabetes;
     private javax.swing.JCheckBox checkboxSmoker;
-    private javax.swing.JComboBox comboBloodPressureType;
     private javax.swing.JComboBox comboCholesterolMeasurement;
     private javax.swing.JComboBox comboHdlcMeasurement;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblAge;
-    private javax.swing.JLabel lblBloodPressure;
+    private javax.swing.JLabel lblBloodPressureDiastolic;
+    private javax.swing.JLabel lblBloodPressureSystolic;
     private javax.swing.JLabel lblCvdRisk;
     private javax.swing.JLabel lblCvdTenYearRisk;
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblHdl;
     private javax.swing.JPanel panelAge;
-    private javax.swing.JPanel panelBloodPressure;
+    private javax.swing.JPanel panelBloodPressureDiastolic;
+    private javax.swing.JPanel panelBloodPressureSystolic;
     private javax.swing.JPanel panelCalculator;
     private javax.swing.JPanel panelCholesterol;
     private javax.swing.JPanel panelHdl;
@@ -692,11 +742,13 @@ public class CalculatorScreen extends javax.swing.JFrame
     private javax.swing.JRadioButton radioGenderMale;
     private javax.swing.JRadioButton radioLdlC;
     private javax.swing.JSlider sliderAge;
-    private javax.swing.JSlider sliderBloodPressure;
+    private javax.swing.JSlider sliderBloodPressureDiastolic;
+    private javax.swing.JSlider sliderBloodPressureSystolic;
     private javax.swing.JSlider sliderCholesterol;
     private javax.swing.JSlider sliderHdl;
     private javax.swing.JTextField txtAge;
-    private javax.swing.JTextField txtBloodPressure;
+    private javax.swing.JTextField txtBloodPressureDiastolic;
+    private javax.swing.JTextField txtBloodPressureSystolic;
     private javax.swing.JTextField txtCholesterol;
     private javax.swing.JTextField txtHdl;
     // End of variables declaration//GEN-END:variables

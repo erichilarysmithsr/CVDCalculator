@@ -6,11 +6,19 @@
 package gamma.cvd.calculator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Erling Austvoll
  */
+
+// Name lengths in this class are limited to 35 characters for each of first and
+// last names, as per recommendation of the e-Government Interoperability
+// Framework (e-GIF) Data Types Standards.
+// Ref.: http://webarchive.nationalarchives.gov.uk/+/http:/www.cabinetoffice.gov.uk/media/254290/GDS%20Catalogue%20Vol%202.pdf
+
 public class CVDPatient {
     
     public static final char MALE = 'M';
@@ -21,9 +29,36 @@ public class CVDPatient {
     private String lastName;
     private LocalDate birthdate;
     private char sex;
+    private List<CVDRiskData> riskData;
 
-    public CVDPatient(String firstName, String lastName, LocalDate birthdate,
-            char sex) {
+//    public CVDPatient(String firstName, String lastName, LocalDate birthdate,
+//            char sex) {
+//        if (firstName.isEmpty()) {
+//            throw new IllegalArgumentException("firstName cannot be null.");
+//        }
+//        if (lastName.isEmpty()) {
+//            throw new IllegalArgumentException("lastName cannot be null.");
+//        }
+//        
+//        this.firstName =
+//                firstName.substring(0, Math.min(firstName.length(), 35));
+//        this.lastName = lastName.substring(0, Math.min(lastName.length(), 35));
+//        if (birthdate.isBefore(LocalDate.now())) {
+//            this.birthdate = birthdate;
+//        } else {
+//            throw new IllegalArgumentException("Invalid birthdate.");
+//        }
+//        if (sex == MALE || sex == FEMALE) {
+//            this.sex = sex;
+//        } else {
+//            throw new IllegalArgumentException("Invalid sex.");
+//        }
+//        this.patientId = -1;
+//        this.riskData = new ArrayList<>();
+//    }
+    
+    protected CVDPatient(String firstName, String lastName, LocalDate birthdate,
+            char sex, int patientId) {
         if (firstName.isEmpty()) {
             throw new IllegalArgumentException("firstName cannot be null.");
         }
@@ -31,12 +66,9 @@ public class CVDPatient {
             throw new IllegalArgumentException("lastName cannot be null.");
         }
         
-        // Name lengths are limited to 35 characters for each of first and last
-        // names, as per recommendation of the e-Government Interoperability
-        // Framework (e-GIF) Data Types Standards.
-        // Ref.: http://webarchive.nationalarchives.gov.uk/+/http:/www.cabinetoffice.gov.uk/media/254290/GDS%20Catalogue%20Vol%202.pdf
-        this.firstName = firstName.substring(0, 35);
-        this.lastName = lastName.substring(0, 35);
+        this.firstName =
+                firstName.substring(0, Math.min(firstName.length(), 35));
+        this.lastName = lastName.substring(0, Math.min(lastName.length(), 35));
         if (birthdate.isBefore(LocalDate.now())) {
             this.birthdate = birthdate;
         } else {
@@ -47,21 +79,81 @@ public class CVDPatient {
         } else {
             throw new IllegalArgumentException("Invalid sex.");
         }
+        this.patientId = patientId;
+        this.riskData = new ArrayList<>();
+    }
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public char getSex() {
+        return sex;
+    }
+
+    protected void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
     
-    public void setPatientName(String firstName, String lastName) {
+    protected boolean setPatientName(String firstName, String lastName) {
         if (firstName.isEmpty()) {
-            throw new IllegalArgumentException("firstName cannot be null.");
+            return false;
         }
         if (lastName.isEmpty()) {
-            throw new IllegalArgumentException("lastName cannot be null.");
+            return false;
         }
+        this.firstName =
+                firstName.substring(0, Math.min(firstName.length(), 35));
+        this.lastName = lastName.substring(0, Math.min(lastName.length(), 35));
+        return true;
+    }
 
-        // Name lengths are limited to 35 characters for each of first and last
-        // names, as per recommendation of the e-Government Interoperability
-        // Framework (e-GIF) Data Types Standards.
-        // Ref.: http://webarchive.nationalarchives.gov.uk/+/http:/www.cabinetoffice.gov.uk/media/254290/GDS%20Catalogue%20Vol%202.pdf
-        this.firstName = firstName.substring(0, 35);
-        this.lastName = lastName.substring(0, 35);
+    public List<CVDRiskData> getRiskData() {
+        return riskData;
+    }
+    
+    public CVDRiskData getRiskDataWithId(int testId) {
+        for (CVDRiskData data : this.riskData) {
+            if (data.getTestId() == testId) {
+                return data;
+            }
+        }
+        return null;
+    }
+
+    protected void setRiskData(List<CVDRiskData> riskData) {
+        this.riskData = riskData;
+    }
+
+    protected boolean addToRiskData(CVDRiskData data) {
+        int newTestId = 1;
+        for (CVDRiskData riskDataEntry : this.riskData) {
+            if (riskDataEntry.getTestId() >= newTestId) {
+                newTestId = riskDataEntry.getTestId() + 1;
+            }
+        }
+        data.setTestId(newTestId);
+        return this.riskData.add(data);
+    }
+    
+    protected boolean removeFromRiskData(int testId) {
+        for (CVDRiskData riskDataEntry : this.riskData) {
+            if (riskDataEntry.getTestId() == testId) {
+                return this.riskData.remove(riskDataEntry);
+            }
+        }
+        return false;
     }
 }

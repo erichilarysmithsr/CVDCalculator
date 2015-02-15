@@ -2,14 +2,13 @@ package gamma.cvd.calculator;
 
 import java.time.LocalDate;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
+ * This risk data calculator is created on the basis of the two charts, male and
+ * female in Appendix A in the coursework document. The score-to-risk
+ * calculation changes based on whether the patient is male or female, and
+ * whether LDL or cholesterol data is provided. LDL/cholesterol and HDL levels
+ * can be measured either as mmol/L or mg/dl, there are therefore four
+ * constructor methods to allow any combination of these.
  * @author Erling Austvoll
  */
 public class CVDRiskData {
@@ -19,6 +18,7 @@ public class CVDRiskData {
     public static final String LDL = "Low-density lipoprotein";
     public static final String CHOL = "Cholesterol";
     
+    private int testId;
     private char sex;
     private int age;
     private String cholesterolType;
@@ -30,9 +30,6 @@ public class CVDRiskData {
     private boolean isSmoker;
     private LocalDate testDate;
 
-    public CVDRiskData() {}
-    
-    // Constructor for MmolL cholesterol & MmolL HDL
     public CVDRiskData(char sex, int age, String cholesterolType,
             float cholesterolMmolL, float hdlMmolL,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -80,7 +77,6 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
     
-    // Constructor for MgDl cholesterol & MmolL HDL
     public CVDRiskData(char sex, int age, String cholesterolType, 
             int cholesterolMgDl, float hdlMmolL,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -128,7 +124,6 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
     
-    // Constructor for MmolL cholesterol & MgDl HDL
     public CVDRiskData(char sex, int age, String cholesterolType,
             float cholesterolMmolL, int hdlMgDl,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -176,7 +171,6 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
     
-    // Constructor for MgDl cholesterol & MgDl HDL
     public CVDRiskData(char sex, int age, String cholesterolType, 
             int cholesterolMgDl, int hdlMgDl,
             int bloodPressureSystolicMmHg, int bloodPressureDiastolicMmHg,
@@ -222,14 +216,6 @@ public class CVDRiskData {
         this.isDiabetic = isDiabetic;
         this.isSmoker = isSmoker;
         this.testDate = testDate;
-    }
-    
-    public void setMale() {
-        this.sex = MALE;
-    }
-    
-    public void setFemale() {
-        this.sex = FEMALE;
     }
 
     public void setAge(int age) {
@@ -282,6 +268,14 @@ public class CVDRiskData {
         this.isSmoker = isSmoker;
     }
 
+    public void setTestDate(LocalDate testDate) {
+        this.testDate = testDate;
+    }
+
+    protected void setTestId(int testId) {
+        this.testId = testId;
+    }
+    
     public char getSex() {
         return sex;
     }
@@ -310,12 +304,20 @@ public class CVDRiskData {
         return bloodPressureDiastolicMmHg;
     }
 
-    public boolean isIsDiabetic() {
+    public boolean isDiabetic() {
         return isDiabetic;
     }
 
-    public boolean isIsSmoker() {
+    public boolean isSmoker() {
         return isSmoker;
+    }
+
+    public LocalDate getTestDate() {
+        return testDate;
+    }
+
+    public int getTestId() {
+        return testId;
     }
     
     public int calculateRiskScore() {

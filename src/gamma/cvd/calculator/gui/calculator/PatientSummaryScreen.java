@@ -201,14 +201,14 @@ public class PatientSummaryScreen extends javax.swing.JFrame
             healthTips.append(LoadHealthTips(new ArrayList<>()));
         }
 
-        if (model.isIsDiabetic())
+        if (model.isDiabetic())
         {
             healthTips.append("<b><u>Tips to manage diabetes</u></b>");
             healthTips.append(NEW_LINE);
             healthTips.append(LoadHealthTips(new ArrayList<>()));
         }
 
-        if (model.isIsSmoker())
+        if (model.isSmoker())
         {
             healthTips.append("<b><u>Tips to quit smoking</u></b>");
             healthTips.append(NEW_LINE);

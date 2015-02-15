@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  */
 public class CVDLogin {
     
-    private Document userDb;
+    private Document userDB;
     private final String USERDBPATH = "UserDB.aes";
     private final String USERDBPASSWORD = "|nTfQP1X.%b<QgyE";
 
@@ -53,26 +53,48 @@ public class CVDLogin {
         loadEncryptedUserDb();
     }
     
-    private void loadEncryptedUserDb() throws GeneralSecurityException,
-            IOException, SAXException, XPathExpressionException {
-        FileInputStream fis = new FileInputStream(USERDBPATH);
+    private void loadEncryptedUserDb()
+            throws GeneralSecurityException, UnsupportedEncodingException,
+            FileNotFoundException, IOException, SAXException,
+            XPathExpressionException {
         AESCrypt aescrypt = new AESCrypt(USERDBPASSWORD);
+        FileInputStream fis = new FileInputStream(USERDBPATH);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         long inSize = fis.getChannel().size();
         aescrypt.decrypt(inSize, fis, baos);
         DOMParser parser = new DOMParser();
         parser.parse(
                 new InputSource(new ByteArrayInputStream(baos.toByteArray())));
-        this.userDb = parser.getDocument();
+        this.userDB = parser.getDocument();
         // The following code gets rid of extra whitespace from the xml file.
         XPath xPath = XPathFactory.newInstance().newXPath();
         NodeList nl = (NodeList)xPath.evaluate(
                 "//text()[normalize-space(.)='']",
-                this.userDb, XPathConstants.NODESET);
+                this.userDB, XPathConstants.NODESET);
         for (int i=0; i < nl.getLength(); ++i) {
             Node node = nl.item(i);
             node.getParentNode().removeChild(node);
         }
+    }
+    
+    private void writeEncryptedUserDb()
+            throws TransformerConfigurationException, TransformerException,
+            FileNotFoundException, GeneralSecurityException,
+            UnsupportedEncodingException, IOException {
+                Transformer transformer =
+                TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(
+                "{http://xml.apache.org/xslt}indent-amount", "4");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Source xmlSource = new DOMSource(this.userDB);
+        Result outputTarget = new StreamResult(outputStream);
+        transformer.transform(xmlSource, outputTarget);
+        InputStream is =
+                new ByteArrayInputStream(outputStream.toByteArray());
+        FileOutputStream fos = new FileOutputStream(USERDBPATH);
+        AESCrypt aescrypt = new AESCrypt(USERDBPASSWORD);
+        aescrypt.encrypt(2, is, fos);
     }
     
     public boolean validateUsernameAndPassword(String username,
@@ -82,7 +104,7 @@ public class CVDLogin {
         XPath xPath = XPathFactory.newInstance().newXPath();
         Element passwordElement = (Element)xPath.evaluate(
                 "//User[@username='" + username + "']/PasswordHash",
-                this.userDb, XPathConstants.NODE);
+                this.userDB, XPathConstants.NODE);
         if (passwordElement != null) {
             return PasswordHash.validatePassword(password,
                     passwordElement.getTextContent());
@@ -102,51 +124,38 @@ public class CVDLogin {
         XPath xPath = XPathFactory.newInstance().newXPath();
         Node node = (Node)xPath.evaluate(
                 "//User[@username='" + username + "']",
-                this.userDb, XPathConstants.NODE);
+                this.userDB, XPathConstants.NODE);
         if (node != null) {
             return false;
         } else {
-           Element rootElement = this.userDb.getDocumentElement();
-            Element userElement = this.userDb.createElement("User");
+           Element rootElement = this.userDB.getDocumentElement();
+            Element userElement = this.userDB.createElement("User");
             userElement.setAttribute("username", username);
             rootElement.appendChild(userElement);
 
-            Element passwordElement = this.userDb.createElement("PasswordHash");
+            Element passwordElement = this.userDB.createElement("PasswordHash");
             passwordElement.appendChild(
-                    this.userDb.createTextNode(
+                    this.userDB.createTextNode(
                             PasswordHash.createHash(password)));
             userElement.appendChild(passwordElement);
 
-            Element titleElement = this.userDb.createElement("Title");
-            titleElement.appendChild(this.userDb.createTextNode(title));
+            Element titleElement = this.userDB.createElement("Title");
+            titleElement.appendChild(this.userDB.createTextNode(title));
             userElement.appendChild(titleElement);
 
-            Element firstnameElement = this.userDb.createElement("FirstName");
-            firstnameElement.appendChild(this.userDb.createTextNode(firstname));
+            Element firstnameElement = this.userDB.createElement("FirstName");
+            firstnameElement.appendChild(this.userDB.createTextNode(firstname));
             userElement.appendChild(firstnameElement);
 
-            Element lastnameElement = this.userDb.createElement("FirstName");
-            lastnameElement.appendChild(this.userDb.createTextNode(lastname));
+            Element lastnameElement = this.userDB.createElement("FirstName");
+            lastnameElement.appendChild(this.userDB.createTextNode(lastname));
             userElement.appendChild(lastnameElement);
 
-            Element emailElement = this.userDb.createElement("EmailAddress");
-            emailElement.appendChild(this.userDb.createTextNode(emailAddress));
+            Element emailElement = this.userDB.createElement("EmailAddress");
+            emailElement.appendChild(this.userDB.createTextNode(emailAddress));
             userElement.appendChild(emailElement);
 
-            Transformer transformer =
-                    TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(
-                    "{http://xml.apache.org/xslt}indent-amount", "4");
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Source xmlSource = new DOMSource(this.userDb);
-            Result outputTarget = new StreamResult(outputStream);
-            transformer.transform(xmlSource, outputTarget);
-            InputStream is =
-                    new ByteArrayInputStream(outputStream.toByteArray());
-            FileOutputStream fos = new FileOutputStream(USERDBPATH);
-            AESCrypt aescrypt = new AESCrypt(USERDBPASSWORD);
-            aescrypt.encrypt(2, is, fos);
+            writeEncryptedUserDb();
             return true; 
         }
     }
@@ -159,24 +168,10 @@ public class CVDLogin {
         XPath xPath = XPathFactory.newInstance().newXPath();
         Node node = (Node)xPath.evaluate(
                 "//User[@username='" + username + "']",
-                this.userDb, XPathConstants.NODE);
+                this.userDB, XPathConstants.NODE);
         if (node != null) {
             node.getParentNode().removeChild(node);
-            
-            Transformer transformer =
-                    TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(
-                    "{http://xml.apache.org/xslt}indent-amount", "4");
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Source xmlSource = new DOMSource(this.userDb);
-            Result outputTarget = new StreamResult(outputStream);
-            transformer.transform(xmlSource, outputTarget);
-            InputStream is =
-                    new ByteArrayInputStream(outputStream.toByteArray());
-            FileOutputStream fos = new FileOutputStream(USERDBPATH);
-            AESCrypt aescrypt = new AESCrypt(USERDBPASSWORD);
-            aescrypt.encrypt(2, is, fos);
+            writeEncryptedUserDb();
             return true;
         } else {
             return false;

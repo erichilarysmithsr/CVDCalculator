@@ -127,11 +127,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="imgRiskSummary">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Jack\Documents\GitHub\CVDCalculator\resources\icons\calculatorStaticHearts\heart1pct.png"/>
-            </Property>
-          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblYouAre">
           <Properties>
