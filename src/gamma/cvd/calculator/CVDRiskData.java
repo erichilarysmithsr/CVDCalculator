@@ -272,6 +272,10 @@ public class CVDRiskData {
         this.testDate = testDate;
     }
 
+    protected void setSex(char sex) {
+        this.sex = sex;
+    }
+
     protected void setTestId(int testId) {
         this.testId = testId;
     }

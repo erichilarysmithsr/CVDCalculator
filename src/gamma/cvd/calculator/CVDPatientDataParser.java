@@ -18,6 +18,7 @@ import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -179,19 +180,10 @@ public class CVDPatientDataParser {
     }
     
     public List<CVDPatient> getPatientList() {
-        return this.patientList;
+        return Collections.unmodifiableList(this.patientList);
     }
     
-    public CVDPatient getPatientWithId(int patientId) {
-        for (CVDPatient patient : this.patientList) {
-            if (patient.getPatientId() == patientId) {
-                return patient;
-            }
-        }
-        return null;
-    }
-    
-    public CVDPatient addNewPatient(String firstName, String lastName,
+    public boolean addNewPatient(String firstName, String lastName,
             LocalDate birthdate, char sex)
             throws FileNotFoundException, TransformerException,
             GeneralSecurityException, IOException {
@@ -232,9 +224,9 @@ public class CVDPatientDataParser {
                     String.valueOf(sex)));
             patientElement.appendChild(sexElement);
             writeEncryptedPatientDb();
-            return newPatient;
+            return true;
         } else {
-            return null;
+            return false;
         }
     }
     
@@ -245,17 +237,15 @@ public class CVDPatientDataParser {
         Node node = (Node)xPath.evaluate(
                 "//Patient[@id='" + String.valueOf(patient.getPatientId()) +
                         "']", this.patientDb, XPathConstants.NODE);
-        if (node != null && this.patientList.contains(patient)) {
-            if (this.patientList.remove(patient)) {
-                node.getParentNode().removeChild(node);
-                writeEncryptedPatientDb();
-                return true;
-            }
+        if (node != null && this.patientList.remove(patient)) {
+            node.getParentNode().removeChild(node);
+            writeEncryptedPatientDb();
+            return true;
         }
         return false;
     }
     
-    public CVDPatient addRiskDataToPatient(CVDPatient patient,
+    public boolean addRiskDataToPatient(CVDPatient patient,
             CVDRiskData data) throws XPathExpressionException,
             FileNotFoundException, TransformerException,
             GeneralSecurityException, IOException {
@@ -263,9 +253,9 @@ public class CVDPatientDataParser {
         Node patientNode = (Node)xPath.evaluate(
                 "//Patient[@id='" + String.valueOf(patient.getPatientId()) +
                         "']", this.patientDb, XPathConstants.NODE);
-        if (patientNode != null && this.patientList.contains(patient)) {
+        if (patientNode != null) {
             if (data.getSex() != patient.getSex()) {
-                return null;
+                data.setSex(patient.getSex());
             }
             data.setAge(Period.between(
                     patient.getBirthdate(), data.getTestDate()).getYears());
@@ -276,8 +266,7 @@ public class CVDPatientDataParser {
                 }
             }
             data.setTestId(testId);
-            int patientIndex = this.patientList.indexOf(patient);
-            if (this.patientList.get(patientIndex).addToRiskData(data)) {
+            if (patient.addToRiskData(data)) {
                 Element testDataElement =
                         this.patientDb.createElement("TestData");
                 testDataElement.setAttribute("testId",
@@ -334,13 +323,13 @@ public class CVDPatientDataParser {
                 testDataElement.appendChild(smokerElement);
 
                 writeEncryptedPatientDb();
-                return this.patientList.get(patientIndex);
+                return true;
             }
         }
-        return null;
+        return false;
     }
     
-    public CVDPatient removeRiskDataFromPatient(CVDPatient patient,
+    public boolean removeRiskDataFromPatient(CVDPatient patient,
             CVDRiskData data) throws XPathExpressionException,
             FileNotFoundException, TransformerException,
             GeneralSecurityException, IOException {
@@ -351,19 +340,15 @@ public class CVDPatientDataParser {
         Node testDataNode = (Node)xPath.evaluate(
                 "TestData[@testId='" + String.valueOf(data.getTestId()) +
                         "']", patientNode, XPathConstants.NODE);
-        if (testDataNode != null && this.patientList.contains(patient) &&
-                patient.getRiskData().contains(data)) {
-            int patientIndex = this.patientList.indexOf(patient);
-            if (this.patientList.get(patientIndex).getRiskData().remove(data)) {
-                testDataNode.getParentNode().removeChild(testDataNode);
-                writeEncryptedPatientDb();
-                return this.patientList.get(patientIndex);
-            }
+        if (testDataNode != null && patient.removeFromRiskData(data)) {
+            testDataNode.getParentNode().removeChild(testDataNode);
+            writeEncryptedPatientDb();
+            return true;
         }
-        return null;
+        return false;
     }
     
-    public CVDPatient changePatientName(CVDPatient patient, String firstName,
+    public boolean changePatientName(CVDPatient patient, String firstName,
             String lastName) throws XPathExpressionException,
             FileNotFoundException, TransformerException,
             GeneralSecurityException, IOException {
@@ -371,206 +356,17 @@ public class CVDPatientDataParser {
         Node patientNode = (Node)xPath.evaluate(
                 "//Patient[@id='" + String.valueOf(patient.getPatientId()) +
                         "']", this.patientDb, XPathConstants.NODE);
-        if (patientNode != null && this.patientList.contains(patient)) {
-            int patientIndex = this.patientList.indexOf(patient);
-            if (this.patientList.get(patientIndex)
-                    .setPatientName(firstName, lastName)) {
-                Node firstNameNode = (Node)xPath.evaluate(
-                    "FirstName", patientNode, XPathConstants.NODE);
-                firstNameNode.setTextContent(firstName);
-                Node lastNameNode = (Node)xPath.evaluate(
-                    "LastName", patientNode, XPathConstants.NODE);
-                lastNameNode.setTextContent(lastName);
-                writeEncryptedPatientDb();
-                return this.patientList.get(patientIndex);
-            }
+        if (patientNode != null &&
+                patient.setPatientName(firstName, lastName)) {
+            Node firstNameNode = (Node)xPath.evaluate(
+                "FirstName", patientNode, XPathConstants.NODE);
+            firstNameNode.setTextContent(firstName);
+            Node lastNameNode = (Node)xPath.evaluate(
+                "LastName", patientNode, XPathConstants.NODE);
+            lastNameNode.setTextContent(lastName);
+            writeEncryptedPatientDb();
+            return true;
         }
-        return null;
+        return false;
     }
-    
-//    public List<CVDPatient> changePatientName(int patientId, String firstName,
-//            String lastName) throws ParserConfigurationException,
-//            TransformerConfigurationException, FileNotFoundException,
-//            TransformerException {
-//        for (CVDPatient patient : this.patientList) {
-//            if (patient.getPatientId() == patientId) {
-//                patient.setPatientName(firstName, lastName);
-//                writeEncryptedPatientDbOld();
-//                return this.patientList;
-//            }
-//        }
-//        return null;
-//    }
-    
-//    public List<CVDPatient> removeRiskDataFromPatient(int patientId, int testId)
-//            throws ParserConfigurationException,
-//            TransformerConfigurationException, FileNotFoundException,
-//            TransformerException {
-//        for (CVDPatient patient : this.patientList) {
-//            if (patient.getPatientId() == patientId) {
-//                if (patient.removeFromRiskData(testId)) {
-//                    writeEncryptedPatientDbOld();
-//                    return this.patientList;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        }
-//        return null;
-//    }
-    
-//    public List<CVDPatient> addPatient(CVDPatient newPatient)
-//            throws ParserConfigurationException,
-//            TransformerConfigurationException, FileNotFoundException,
-//            TransformerException {
-//        int newPatientId = 1;
-//        for (CVDPatient patient : this.patientList) {
-//            if (patient.getPatientId() >= newPatientId) {
-//                newPatientId = patient.getPatientId() + 1;
-//            }
-//        }
-//        newPatient.setPatientId(newPatientId);
-//        if (this.patientList.add(newPatient)) {
-////            Element rootElement
-//            writeEncryptedPatientDbOld();
-//            return this.patientList;
-//        } else {
-//            return null;
-//        }
-//    }
-    
-//    public List<CVDPatient> removePatient(int patientId)
-//            throws ParserConfigurationException,
-//            TransformerConfigurationException, FileNotFoundException,
-//            TransformerException {
-//        for (CVDPatient patient : this.patientList) {
-//            if (patient.getPatientId() == patientId) {
-//                if (this.patientList.remove(patient)) {
-//                    writeEncryptedPatientDbOld();
-//                    return this.patientList;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        }
-//        return null;
-//    }
-//    
-//    public List<CVDPatient> addRiskDataToPatient(
-//            int patientId, CVDRiskData data)
-//            throws ParserConfigurationException,
-//            TransformerConfigurationException, FileNotFoundException,
-//            TransformerException {
-//        for (CVDPatient patient : this.patientList) {
-//            if (patient.getPatientId() == patientId) {
-//                if (patient.addToRiskData(data)) {
-//                    writeEncryptedPatientDbOld();
-//                    return this.patientList;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        }
-//        return null;
-//    }
-    
-//        private void writeEncryptedPatientDbOld() throws ParserConfigurationException,
-//            TransformerConfigurationException, FileNotFoundException,
-//            TransformerException {
-//        Document newPatientDb = DocumentBuilderFactory.newInstance()
-//                .newDocumentBuilder().newDocument();
-//        newPatientDb.appendChild(newPatientDb.createElement("root"));
-//        for (CVDPatient patient : patientList) {
-//            Element rootElement = newPatientDb.getDocumentElement();
-//            Element patientElement = newPatientDb.createElement("Patient");
-//            patientElement.setAttribute("id",
-//                    String.valueOf(patient.getPatientId()));
-//            rootElement.appendChild(patientElement);
-//            
-//            Element firstNameElement = newPatientDb.createElement("FirstName");
-//            firstNameElement.appendChild(newPatientDb.createTextNode(
-//                    patient.getFirstName()));
-//            patientElement.appendChild(firstNameElement);
-//            
-//            Element lastNameElement = newPatientDb.createElement("LastName");
-//            lastNameElement.appendChild(newPatientDb.createTextNode(
-//                    patient.getLastName()));
-//            patientElement.appendChild(lastNameElement);
-//            
-//            Element birthdateElement = newPatientDb.createElement("Birthdate");
-//            birthdateElement.appendChild(newPatientDb.createTextNode(
-//                    patient.getBirthdate().toString()));
-//            patientElement.appendChild(birthdateElement);
-//            
-//            Element sexElement = newPatientDb.createElement("Sex");
-//            sexElement.appendChild(newPatientDb.createTextNode(
-//                    String.valueOf(patient.getSex())));
-//            patientElement.appendChild(sexElement);
-//            for (CVDRiskData data : patient.getRiskData()) {
-//                Element testDataElement = newPatientDb
-//                        .createElement("TestData");
-//                testDataElement.setAttribute("testId",
-//                        String.valueOf(data.getTestId()));
-//                patientElement.appendChild(testDataElement);
-//                
-//                Element dateElement = newPatientDb.createElement("Date");
-//                dateElement.appendChild(newPatientDb.createTextNode(
-//                        data.getTestDate().toString()));
-//                testDataElement.appendChild(dateElement);
-//                
-//                Element cholesterolTypeElement = newPatientDb
-//                        .createElement("CholesterolType");
-//                cholesterolTypeElement.appendChild(newPatientDb.createTextNode(
-//                        data.getCholesterolType()));
-//                testDataElement.appendChild(cholesterolTypeElement);
-//                
-//                Element cholesterolValueElement = newPatientDb
-//                        .createElement("CholesterolValue");
-//                cholesterolValueElement.appendChild(newPatientDb.createTextNode(
-//                        String.valueOf(data.getCholesterolMmolL())));
-//                testDataElement.appendChild(cholesterolValueElement);
-//                
-//                Element hdlValueElement = newPatientDb
-//                        .createElement("HDLValue");
-//                hdlValueElement.appendChild(newPatientDb.createTextNode(
-//                        String.valueOf(data.getHdlMmolL())));
-//                testDataElement.appendChild(hdlValueElement);
-//                
-//                Element diastolicBloodPressureElement = newPatientDb
-//                        .createElement("DiastolicBloodPressure");
-//                diastolicBloodPressureElement.appendChild(newPatientDb
-//                        .createTextNode(String.valueOf(
-//                                data.getBloodPressureDiastolicMmHg())));
-//                testDataElement.appendChild(diastolicBloodPressureElement);
-//                
-//                Element systolicBloodPressureElement = newPatientDb
-//                        .createElement("SystolicBloodPressure");
-//                systolicBloodPressureElement.appendChild(newPatientDb
-//                        .createTextNode(String.valueOf(
-//                                data.getBloodPressureSystolicMmHg())));
-//                testDataElement.appendChild(systolicBloodPressureElement);
-//                
-//                Element diabetesElement = newPatientDb
-//                        .createElement("Diabetes");
-//                diabetesElement.appendChild(newPatientDb.createTextNode(
-//                        String.valueOf(data.isDiabetic())));
-//                testDataElement.appendChild(diabetesElement);
-//                
-//                Element smokerElement = newPatientDb.createElement("Smoker");
-//                smokerElement.appendChild(newPatientDb.createTextNode(
-//                        String.valueOf(data.isSmoker())));
-//                testDataElement.appendChild(smokerElement);
-//            }
-//        }
-//        Transformer transformer =
-//                TransformerFactory.newInstance().newTransformer();
-//        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//        transformer.setOutputProperty(
-//                "{http://xml.apache.org/xslt}indent-amount", "4");
-//        FileOutputStream fileOutputStream =
-//                new FileOutputStream("PatientDbTest.xml");
-//        Source xmlSource = new DOMSource(newPatientDb);
-//        Result result = new StreamResult(fileOutputStream);
-//        transformer.transform(xmlSource, result);
-//    }
 }

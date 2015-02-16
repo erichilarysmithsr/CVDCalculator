@@ -7,6 +7,7 @@ package gamma.cvd.calculator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,32 +31,6 @@ public class CVDPatient {
     private LocalDate birthdate;
     private char sex;
     private List<CVDRiskData> riskData;
-
-//    public CVDPatient(String firstName, String lastName, LocalDate birthdate,
-//            char sex) {
-//        if (firstName.isEmpty()) {
-//            throw new IllegalArgumentException("firstName cannot be null.");
-//        }
-//        if (lastName.isEmpty()) {
-//            throw new IllegalArgumentException("lastName cannot be null.");
-//        }
-//        
-//        this.firstName =
-//                firstName.substring(0, Math.min(firstName.length(), 35));
-//        this.lastName = lastName.substring(0, Math.min(lastName.length(), 35));
-//        if (birthdate.isBefore(LocalDate.now())) {
-//            this.birthdate = birthdate;
-//        } else {
-//            throw new IllegalArgumentException("Invalid birthdate.");
-//        }
-//        if (sex == MALE || sex == FEMALE) {
-//            this.sex = sex;
-//        } else {
-//            throw new IllegalArgumentException("Invalid sex.");
-//        }
-//        this.patientId = -1;
-//        this.riskData = new ArrayList<>();
-//    }
     
     protected CVDPatient(String firstName, String lastName, LocalDate birthdate,
             char sex, int patientId) {
@@ -121,16 +96,7 @@ public class CVDPatient {
     }
 
     public List<CVDRiskData> getRiskData() {
-        return riskData;
-    }
-    
-    public CVDRiskData getRiskDataWithId(int testId) {
-        for (CVDRiskData data : this.riskData) {
-            if (data.getTestId() == testId) {
-                return data;
-            }
-        }
-        return null;
+        return Collections.unmodifiableList(this.riskData);
     }
 
     protected void setRiskData(List<CVDRiskData> riskData) {
@@ -148,12 +114,7 @@ public class CVDPatient {
         return this.riskData.add(data);
     }
     
-    protected boolean removeFromRiskData(int testId) {
-        for (CVDRiskData riskDataEntry : this.riskData) {
-            if (riskDataEntry.getTestId() == testId) {
-                return this.riskData.remove(riskDataEntry);
-            }
-        }
-        return false;
+    protected boolean removeFromRiskData(CVDRiskData data) {
+        return this.riskData.remove(data);
     }
 }
