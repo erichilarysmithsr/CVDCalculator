@@ -2,7 +2,18 @@ package gamma.cvd.calculator.gui.login;
 
 import gamma.cvd.calculator.gui.GuiUtils;
 import gamma.cvd.calculator.gui.menu.MainMenuScreen;
+import gamma.cvd.login.CVDLogin;
+import gamma.cvd.login.PasswordHash;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.xml.xpath.XPathExpressionException;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -11,20 +22,34 @@ import javax.swing.JOptionPane;
  */
 public class LoginScreen extends javax.swing.JFrame
 {
-
+    
+    private CVDLogin auth;
     /**
      * Creates new form LoginScreen
      */
     public LoginScreen()
     {
-        initComponents();
-        
-       
-        GuiUtils.setNativeGuiStyle(this);
-        
-        // Center screen
-        GuiUtils.centerScreen(this);
-                GuiUtils.setNativeGuiStyle(this);
+        try {
+            this.auth = new CVDLogin();
+            
+            initComponents();
+            
+            
+            GuiUtils.setNativeGuiStyle(this);
+            
+            // Center screen
+            GuiUtils.centerScreen(this);
+            GuiUtils.setNativeGuiStyle(this);
+            
+        } catch (SAXException ex) {
+            Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (XPathExpressionException ex) {
+            Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     
@@ -149,29 +174,36 @@ public class LoginScreen extends javax.swing.JFrame
     private void btnAccessRegistrationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAccessRegistrationActionPerformed
     {//GEN-HEADEREND:event_btnAccessRegistrationActionPerformed
         
-        // Display error if username & password fields have no characters (Does not check for spaces)
+             new RegistrationPromptScreen(auth).setVisible(true);    
+    }//GEN-LAST:event_btnAccessRegistrationActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoginActionPerformed
+    {//GEN-HEADEREND:event_btnLoginActionPerformed
+        
         if (txtLoginUsername.getText().isEmpty() || txtLoginPassword.getPassword().length == 0)
         {
             JOptionPane.showMessageDialog(this, "Please fill the correct fields in with your desired username and password", "Insufficient Details", JOptionPane.WARNING_MESSAGE);          
         }
         else
-        {
-             new RegistrationPromptScreen().setVisible(true);    
-        }
-    }//GEN-LAST:event_btnAccessRegistrationActionPerformed
+        { 
+            try {
+                String username = txtLoginUsername.getText();
+                String password = Arrays.toString(txtLoginPassword.getPassword());
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoginActionPerformed
-    {//GEN-HEADEREND:event_btnLoginActionPerformed
-        boolean loginIsValid = true; 
-        
-        if (!loginIsValid)
-        {
-            JOptionPane.showMessageDialog(this, "Incorrect username/password combination used, please enter your correct username and password", "Invalid Login", JOptionPane.WARNING_MESSAGE);          
-        }
-        else
-        {
-            dispose();
-            new MainMenuScreen().setVisible(true);            
+                boolean loginIsValid = auth.validateUsernameAndPassword(username, password);
+                
+                if (!loginIsValid)
+                {
+                    JOptionPane.showMessageDialog(this, "Incorrect username/password combination used, please enter your correct username and password", "Invalid Login", JOptionPane.WARNING_MESSAGE);
+                }
+                else
+                {
+                    dispose();            
+                    new MainMenuScreen().setVisible(true);
+                }
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException | XPathExpressionException ex) {
+                Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
