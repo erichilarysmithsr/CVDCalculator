@@ -3,10 +3,12 @@ package gamma.cvd.calculator.gui.login;
 import gamma.cvd.calculator.gui.GuiUtils;
 import gamma.cvd.calculator.gui.menu.MainMenuScreen;
 import gamma.cvd.login.CVDLogin;
+import gamma.cvd.login.PasswordHash;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -186,8 +188,8 @@ public class LoginScreen extends javax.swing.JFrame
         { 
             try {
                 String username = txtLoginUsername.getText();
-                String password = txtLoginPassword.getText();
-                
+                String password = Arrays.toString(txtLoginPassword.getPassword());
+
                 boolean loginIsValid = auth.validateUsernameAndPassword(username, password);
                 
                 if (!loginIsValid)

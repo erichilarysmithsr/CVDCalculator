@@ -96,10 +96,6 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
 
         lblTitle.setText("Title:");
 
-        txtPassword.setText("jPasswordField1");
-
-        txtPasswordCheck.setText("jPasswordField1");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
