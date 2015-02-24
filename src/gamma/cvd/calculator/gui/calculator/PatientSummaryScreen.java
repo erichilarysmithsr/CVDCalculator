@@ -6,6 +6,7 @@
 package gamma.cvd.calculator.gui.calculator;
 
 import gamma.cvd.calculator.CVDRiskData;
+import gamma.cvd.calculator.gui.GuiUtils;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.Icon;
@@ -20,6 +21,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
 {
     PatientSummaryScreen(CVDRiskData model)
     {
+        GuiUtils.centerScreen(this);
         initComponents();
         DisplayHealthTips(model);
         DisplaySummary(model);
@@ -174,47 +176,49 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         // Enable HTML formatting
         healthTips.append("<html>");
         healthTips.append(HTML_FONT);
+        
+        if (model != null)
+        {
+            if (model.getCholesterolType().equals(CVDRiskData.LDL) && model.getCholesterolMmolL() > LDL_UPPER_BOUND)
+            {
+                healthTips.append("<b><u>Cholesterol tips</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(new ArrayList<>()));
+            } else if (model.getCholesterolMmolL() > CHOLESTEROL_UPPER_BOUND)
+            {
+                healthTips.append("<b><u>Cholesterol tips</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(new ArrayList<>()));
+            }
 
-        if (model.getCholesterolType().equals(CVDRiskData.LDL) && model.getCholesterolMmolL() > LDL_UPPER_BOUND)
-        {
-            healthTips.append("<b><u>Cholesterol tips</u></b>");
-            healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));
-        } else if (model.getCholesterolMmolL() > CHOLESTEROL_UPPER_BOUND)
-        {
-            healthTips.append("<b><u>Cholesterol tips</u></b>");
-            healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));
+            if (model.getHdlMmolL() < HDL_LOWER_BOUND)
+            {
+                healthTips.append("<b><u>HDL tips</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(new ArrayList<>()));
+            }
+
+            if (model.getBloodPressureDiastolicMmHg() > DIASTOLIC_BP_UPPER_BOUND)
+            {
+                healthTips.append("<b><u>Blood Pressure Tips</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(new ArrayList<>()));
+            }
+
+            if (model.isDiabetic())
+            {
+                healthTips.append("<b><u>Tips to manage diabetes</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(new ArrayList<>()));
+            }
+
+            if (model.isSmoker())
+            {
+                healthTips.append("<b><u>Tips to quit smoking</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(new ArrayList<>()));
+            }
         }
-
-        if (model.getHdlMmolL() < HDL_LOWER_BOUND)
-        {
-            healthTips.append("<b><u>HDL tips</u></b>");
-            healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));
-        }
-
-        if (model.getBloodPressureDiastolicMmHg() > DIASTOLIC_BP_UPPER_BOUND)
-        {
-            healthTips.append("<b><u>Blood Pressure Tips</u></b>");
-            healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));
-        }
-
-        if (model.isDiabetic())
-        {
-            healthTips.append("<b><u>Tips to manage diabetes</u></b>");
-            healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));
-        }
-
-        if (model.isSmoker())
-        {
-            healthTips.append("<b><u>Tips to quit smoking</u></b>");
-            healthTips.append(NEW_LINE);
-            healthTips.append(LoadHealthTips(new ArrayList<>()));
-        }
-
         healthTips.append("</font>");
 
         txtTips.setText(healthTips.toString());

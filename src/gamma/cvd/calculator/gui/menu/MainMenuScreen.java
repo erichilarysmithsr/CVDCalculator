@@ -6,7 +6,6 @@
 package gamma.cvd.calculator.gui.menu;
 
 import gamma.cvd.calculator.gui.GuiUtils;
-import gamma.cvd.calculator.gui.calculator.CalculatorScreen;
 
 /**
  *
@@ -31,8 +30,7 @@ public class MainMenuScreen extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         imgLoginIcon = new javax.swing.JLabel();
         btnNewPatient = new javax.swing.JButton();
@@ -46,10 +44,8 @@ public class MainMenuScreen extends javax.swing.JFrame
         setTitle("NHS CVD Calculator - Menu");
 
         btnNewPatient.setText("New Patient");
-        btnNewPatient.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnNewPatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewPatientActionPerformed(evt);
             }
         });
@@ -81,7 +77,7 @@ public class MainMenuScreen extends javax.swing.JFrame
                 .addComponent(btnNewPatient)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnExistingPatient)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -89,8 +85,7 @@ public class MainMenuScreen extends javax.swing.JFrame
 
     private void btnNewPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnNewPatientActionPerformed
     {//GEN-HEADEREND:event_btnNewPatientActionPerformed
-        dispose();
-        new CalculatorScreen().setVisible(true);
+        new PatientRegistrationScreen().setVisible(true);          
     }//GEN-LAST:event_btnNewPatientActionPerformed
 
     /**

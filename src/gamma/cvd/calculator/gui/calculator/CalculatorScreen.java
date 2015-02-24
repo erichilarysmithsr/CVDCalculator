@@ -1,6 +1,8 @@
 package gamma.cvd.calculator.gui.calculator;
 
+import gamma.cvd.calculator.CVDPatient;
 import gamma.cvd.calculator.CVDRiskData;
+import gamma.cvd.calculator.gui.GuiUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -27,8 +29,9 @@ public class CalculatorScreen extends javax.swing.JFrame
     /**
      * Creates new form CalculatorScreen
      */
-    public CalculatorScreen()
+    public CalculatorScreen(CVDPatient patient)
     {
+        GuiUtils.centerScreen(this);
         initComponents();
         groupGenderButtons();
         groupCholesterolButtons();
@@ -271,8 +274,7 @@ public class CalculatorScreen extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         panelCalculator = new javax.swing.JPanel();
         panelLdl = new javax.swing.JPanel();
@@ -309,7 +311,8 @@ public class CalculatorScreen extends javax.swing.JFrame
         txtBloodPressureSystolic = new javax.swing.JTextField();
         checkboxDiabetes = new javax.swing.JCheckBox();
         btnCalculateRisk = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        panelHistory = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("NHS CVD Calculator");
@@ -321,20 +324,16 @@ public class CalculatorScreen extends javax.swing.JFrame
 
         txtCholesterol.setText("0");
         txtCholesterol.setToolTipText("");
-        txtCholesterol.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        txtCholesterol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCholesterolActionPerformed(evt);
             }
         });
 
         comboCholesterolMeasurement.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "mg/dl", "mmol/L" }));
         comboCholesterolMeasurement.setToolTipText("");
-        comboCholesterolMeasurement.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        comboCholesterolMeasurement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboCholesterolMeasurementActionPerformed(evt);
             }
         });
@@ -443,19 +442,15 @@ public class CalculatorScreen extends javax.swing.JFrame
         lblGender.setText("Gender");
 
         checkboxSmoker.setText("Smoker");
-        checkboxSmoker.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        checkboxSmoker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkboxSmokerActionPerformed(evt);
             }
         });
 
         btnSummary.setText("Patient Summary");
-        btnSummary.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnSummary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSummaryActionPerformed(evt);
             }
         });
@@ -566,19 +561,15 @@ public class CalculatorScreen extends javax.swing.JFrame
         );
 
         checkboxDiabetes.setText("Diabetes");
-        checkboxDiabetes.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        checkboxDiabetes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkboxDiabetesActionPerformed(evt);
             }
         });
 
         btnCalculateRisk.setText("Calculate Risk");
-        btnCalculateRisk.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnCalculateRisk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCalculateRiskActionPerformed(evt);
             }
         });
@@ -645,7 +636,7 @@ public class CalculatorScreen extends javax.swing.JFrame
                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCalculatorLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
-                        .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, 105, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
@@ -671,17 +662,25 @@ public class CalculatorScreen extends javax.swing.JFrame
                 .addContainerGap())
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Patient History"));
+        panelHistory.setBorder(javax.swing.BorderFactory.createTitledBorder("Patient History"));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout panelHistoryLayout = new javax.swing.GroupLayout(panelHistory);
+        panelHistory.setLayout(panelHistoryLayout);
+        panelHistoryLayout.setHorizontalGroup(
+            panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHistoryLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(365, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+        panelHistoryLayout.setVerticalGroup(
+            panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHistoryLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -690,16 +689,18 @@ public class CalculatorScreen extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelCalculator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(113, 113, 113)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelCalculator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelCalculator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(3, 3, 3))
         );
 
         pack();
@@ -735,50 +736,6 @@ public class CalculatorScreen extends javax.swing.JFrame
         calculateCvdRisk();
     }//GEN-LAST:event_btnCalculateRiskActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(CalculatorScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(CalculatorScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(CalculatorScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(CalculatorScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new CalculatorScreen().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalculateRisk;
@@ -788,7 +745,7 @@ public class CalculatorScreen extends javax.swing.JFrame
     private javax.swing.JCheckBox checkboxSmoker;
     private javax.swing.JComboBox comboCholesterolMeasurement;
     private javax.swing.JComboBox comboHdlcMeasurement;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel lblAge;
     private javax.swing.JLabel lblBloodPressureDiastolic;
     private javax.swing.JLabel lblBloodPressureSystolic;
@@ -802,6 +759,7 @@ public class CalculatorScreen extends javax.swing.JFrame
     private javax.swing.JPanel panelCalculator;
     private javax.swing.JPanel panelCholesterol;
     private javax.swing.JPanel panelHdl;
+    private javax.swing.JPanel panelHistory;
     private javax.swing.JPanel panelLdl;
     private javax.swing.JRadioButton radioCholesterol;
     private javax.swing.JRadioButton radioGenderFemale;

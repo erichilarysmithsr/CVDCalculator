@@ -187,11 +187,9 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
 
     private void btnEnterKeyActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnEnterKeyActionPerformed
     {//GEN-HEADEREND:event_btnEnterKeyActionPerformed
-       setAllFieldsToWhite();
         
        if (!txtRegistrationKey.getText().equals(REGISTRATION_KEY))
        {
-           txtRegistrationKey.setForeground(java.awt.SystemColor.YELLOW);
            JOptionPane.showMessageDialog(this, "The key entered was incorrect.", "Incorrect Key", JOptionPane.ERROR_MESSAGE);          
        }
        else
@@ -201,51 +199,42 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
                String password = Arrays.toString(txtPassword.getPassword());
                String passwordCheck = Arrays.toString(txtPasswordCheck.getPassword());
                
-               String title = comboTitle.getSelectedItem().toString();
+               String title = String.valueOf(comboTitle.getSelectedItem());
                String firstName = txtFirstName.getText();
                String secondName = txtSecondName.getText();
                String emailAddress = txtEmailAddress.getText();
                
                if (password == null || password.isEmpty())
                {
-                   txtPassword.setForeground(java.awt.SystemColor.YELLOW);                       
                    JOptionPane.showMessageDialog(this, "Password field was empty, please fill in field.", "Empty fields", JOptionPane.ERROR_MESSAGE);
                }
-               
-               if (emailAddress == null || emailAddress.isEmpty())
+               else if (emailAddress == null || emailAddress.isEmpty())
                {
-                   txtEmailAddress.setForeground(java.awt.SystemColor.YELLOW);
                    JOptionPane.showMessageDialog(this, "Email field was empty, please fill in field.", "Empty fields", JOptionPane.ERROR_MESSAGE);
                }
-               
-               if (username == null || username.isEmpty())
+               else if (username == null || username.isEmpty())
                {
-                   txtUsername.setForeground(java.awt.SystemColor.YELLOW);
                    JOptionPane.showMessageDialog(this, "Username field was empty, please fill in field.", "Empty fields", JOptionPane.ERROR_MESSAGE);
                }
-               
-               if (firstName == null || firstName.isEmpty())
+               else if (firstName == null || firstName.isEmpty())
                {
-                   txtFirstName.setForeground(java.awt.SystemColor.YELLOW);
                    JOptionPane.showMessageDialog(this, "First Name field was empty, please fill in field.", "Empty fields", JOptionPane.ERROR_MESSAGE);
                }
-               
-               if (secondName == null || secondName.isEmpty())
+               else if (secondName == null || secondName.isEmpty())
                {
-                   txtSecondName.setForeground(java.awt.SystemColor.YELLOW);
                    JOptionPane.showMessageDialog(this, "Surname field was empty, please fill in field.", "Empty fields", JOptionPane.ERROR_MESSAGE);
                }
-               
-               if (!passwordCheck.equals(password))
+               else if (!passwordCheck.equals(password))
                {
-                   txtPasswordCheck.setForeground(java.awt.SystemColor.YELLOW);
                    JOptionPane.showMessageDialog(this, "The passwords you entered did not match", "Passwords didn't match", JOptionPane.ERROR_MESSAGE);
                }
-               
-               // Call Registration Method with username & password
-               auth.createNewUser(username, password, title, firstName, firstName, emailAddress);
-               JOptionPane.showMessageDialog(this, "Account was succesfully registered, you may now login with your new details", "Succesful Registration", JOptionPane.INFORMATION_MESSAGE);
-               dispose();
+               else
+               {
+                // Call Registration Method with username & password
+                auth.createNewUser(username, password, title, firstName, firstName, emailAddress);
+                JOptionPane.showMessageDialog(this, "Account was succesfully registered, you may now login with your new details", "Succesful Registration", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+               }
            } catch (InvalidKeySpecException ex) {
                Logger.getLogger(RegistrationPromptScreen.class.getName()).log(Level.SEVERE, null, ex);
            } catch (TransformerException | XPathExpressionException | GeneralSecurityException ex) {
@@ -285,14 +274,4 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    private void setAllFieldsToWhite() 
-    {
-        txtRegistrationKey.setForeground(java.awt.SystemColor.WHITE);
-        txtUsername.setForeground(java.awt.SystemColor.WHITE);
-        txtPassword.setForeground(java.awt.SystemColor.WHITE);
-        txtFirstName.setForeground(java.awt.SystemColor.WHITE);
-        txtSecondName.setForeground(java.awt.SystemColor.WHITE);  
-        txtEmailAddress.setForeground(java.awt.SystemColor.WHITE);      
-        txtPassword.setForeground(java.awt.SystemColor.WHITE);
-    }
 }

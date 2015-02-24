@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -54,6 +55,36 @@ public class CVDPatientDataParser {
     public CVDPatientDataParser() throws SAXException, IOException,
             GeneralSecurityException, XPathExpressionException {
         loadEncryptedPatientDb();
+    }
+    
+    public CVDPatient findPatient(String firstName, String surname, char Gender, LocalDate dateOfBirth)
+    {
+        for (Iterator<CVDPatient> it = patientList.iterator(); it.hasNext();) 
+        {
+            CVDPatient patient = it.next();
+            if (patient.getFirstName().equals(firstName) && patient.getLastName().equals(surname))
+            {
+                if (patient.getSex() == (Gender) && patient.getBirthdate().equals(dateOfBirth))
+                {
+                    return patient;
+                }
+            }
+        }
+        
+        return null;         
+    }
+    
+    public CVDPatient findPatient(int patientId)
+    {
+        for (CVDPatient patient: patientList)
+        {
+            if (patient.getPatientId() == patientId)
+            {
+                return patient; 
+            }
+        }
+        
+        return null; 
     }
     
     private void loadEncryptedPatientDb() throws SAXException, IOException,
