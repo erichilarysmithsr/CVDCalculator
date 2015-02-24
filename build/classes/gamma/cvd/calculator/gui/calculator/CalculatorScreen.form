@@ -239,12 +239,12 @@
                 <Component class="javax.swing.JSlider" name="sliderCholesterol">
                   <Properties>
                     <Property name="maximum" type="int" value="320"/>
-                    <Property name="value" type="int" value="0"/>
+                    <Property name="minimum" type="int" value="1"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtCholesterol">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="0"/>
+                    <Property name="text" type="java.lang.String" value="1"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                   <Events>
@@ -319,7 +319,7 @@
             <Component class="javax.swing.JSlider" name="sliderAge">
               <Properties>
                 <Property name="maximum" type="int" value="140"/>
-                <Property name="value" type="int" value="0"/>
+                <Property name="minimum" type="int" value="1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblAge">
@@ -329,8 +329,11 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtAge">
               <Properties>
-                <Property name="text" type="java.lang.String" value="0"/>
+                <Property name="text" type="java.lang.String" value="1"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtAgeActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -426,7 +429,7 @@
             <Component class="javax.swing.JSlider" name="sliderBloodPressureDiastolic">
               <Properties>
                 <Property name="maximum" type="int" value="200"/>
-                <Property name="value" type="int" value="0"/>
+                <Property name="minimum" type="int" value="1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblBloodPressureDiastolic">
@@ -436,7 +439,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtBloodPressureDiastolic">
               <Properties>
-                <Property name="text" type="java.lang.String" value="0"/>
+                <Property name="text" type="java.lang.String" value="1"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -486,7 +489,7 @@
             <Component class="javax.swing.JSlider" name="sliderHdl">
               <Properties>
                 <Property name="maximum" type="int" value="70"/>
-                <Property name="value" type="int" value="0"/>
+                <Property name="minimum" type="int" value="1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblHdl">
@@ -496,7 +499,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtHdl">
               <Properties>
-                <Property name="text" type="java.lang.String" value="0"/>
+                <Property name="text" type="java.lang.String" value="1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="comboHdlcMeasurement">
@@ -549,7 +552,7 @@
             <Component class="javax.swing.JSlider" name="sliderBloodPressureSystolic">
               <Properties>
                 <Property name="maximum" type="int" value="200"/>
-                <Property name="value" type="int" value="0"/>
+                <Property name="minimum" type="int" value="1"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblBloodPressureSystolic">
@@ -559,7 +562,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtBloodPressureSystolic">
               <Properties>
-                <Property name="text" type="java.lang.String" value="0"/>
+                <Property name="text" type="java.lang.String" value="1"/>
               </Properties>
             </Component>
           </SubComponents>

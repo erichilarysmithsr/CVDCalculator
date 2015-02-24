@@ -338,9 +338,9 @@ public class CalculatorScreen extends javax.swing.JFrame
         panelCalculator.setBorder(javax.swing.BorderFactory.createTitledBorder("CVD Calculator"));
 
         sliderCholesterol.setMaximum(320);
-        sliderCholesterol.setValue(0);
+        sliderCholesterol.setMinimum(1);
 
-        txtCholesterol.setText("0");
+        txtCholesterol.setText("1");
         txtCholesterol.setToolTipText("");
         txtCholesterol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -412,11 +412,16 @@ public class CalculatorScreen extends javax.swing.JFrame
         );
 
         sliderAge.setMaximum(140);
-        sliderAge.setValue(0);
+        sliderAge.setMinimum(1);
 
         lblAge.setText("Age (Years)");
 
-        txtAge.setText("0");
+        txtAge.setText("1");
+        txtAge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAgeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelAgeLayout = new javax.swing.GroupLayout(panelAge);
         panelAge.setLayout(panelAgeLayout);
@@ -479,11 +484,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         });
 
         sliderBloodPressureDiastolic.setMaximum(200);
-        sliderBloodPressureDiastolic.setValue(0);
+        sliderBloodPressureDiastolic.setMinimum(1);
 
         lblBloodPressureDiastolic.setText("Blood Pressure Diastolic (mm Hg)");
 
-        txtBloodPressureDiastolic.setText("0");
+        txtBloodPressureDiastolic.setText("1");
 
         javax.swing.GroupLayout panelBloodPressureDiastolicLayout = new javax.swing.GroupLayout(panelBloodPressureDiastolic);
         panelBloodPressureDiastolic.setLayout(panelBloodPressureDiastolicLayout);
@@ -511,11 +516,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         );
 
         sliderHdl.setMaximum(70);
-        sliderHdl.setValue(0);
+        sliderHdl.setMinimum(1);
 
         lblHdl.setText("HDL-C");
 
-        txtHdl.setText("0");
+        txtHdl.setText("1");
 
         comboHdlcMeasurement.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "mg/dl", "mmol/L" }));
         comboHdlcMeasurement.setToolTipText("");
@@ -552,11 +557,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         );
 
         sliderBloodPressureSystolic.setMaximum(200);
-        sliderBloodPressureSystolic.setValue(0);
+        sliderBloodPressureSystolic.setMinimum(1);
 
         lblBloodPressureSystolic.setText("Blood Pressure Systolic (mm Hg)");
 
-        txtBloodPressureSystolic.setText("0");
+        txtBloodPressureSystolic.setText("1");
 
         javax.swing.GroupLayout panelBloodPressureSystolicLayout = new javax.swing.GroupLayout(panelBloodPressureSystolic);
         panelBloodPressureSystolic.setLayout(panelBloodPressureSystolicLayout);
@@ -746,6 +751,7 @@ public class CalculatorScreen extends javax.swing.JFrame
 
     private void btnSummaryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSummaryActionPerformed
     {//GEN-HEADEREND:event_btnSummaryActionPerformed
+        calculateCvdRisk();
         new PatientSummaryScreen(model).setVisible(true);  
     }//GEN-LAST:event_btnSummaryActionPerformed
 
@@ -766,6 +772,10 @@ public class CalculatorScreen extends javax.swing.JFrame
             Logger.getLogger(CalculatorScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSaveResultActionPerformed
+
+    private void txtAgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAgeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAgeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
