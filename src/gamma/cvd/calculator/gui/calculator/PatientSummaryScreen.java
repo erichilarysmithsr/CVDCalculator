@@ -8,7 +8,14 @@ package gamma.cvd.calculator.gui.calculator;
 import gamma.cvd.calculator.CVDRiskData;
 import gamma.cvd.calculator.gui.GuiUtils;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,15 +24,14 @@ import javax.swing.JFrame;
  *
  * @author Jack
  */
-public class PatientSummaryScreen extends javax.swing.JFrame
-{
-    PatientSummaryScreen(CVDRiskData model)
-    {
+public class PatientSummaryScreen extends javax.swing.JFrame {
+
+    PatientSummaryScreen(CVDRiskData model) {
         GuiUtils.centerScreen(this);
         initComponents();
         DisplayHealthTips(model);
         DisplaySummary(model);
-        
+
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
@@ -36,8 +42,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         panelRiskSummary = new javax.swing.JPanel();
         lblRiskSummary = new javax.swing.JLabel();
@@ -49,7 +54,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         jScrollPane1 = new javax.swing.JScrollPane();
         txtTips = new javax.swing.JEditorPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("NHS CVD Calculator - Patient Summary");
 
         panelRiskSummary.setBorder(javax.swing.BorderFactory.createTitledBorder("Risk"));
@@ -62,8 +67,6 @@ public class PatientSummaryScreen extends javax.swing.JFrame
 
         lblAvgRisk.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblAvgRisk.setText("<html>The average % risk for your<br> age group is: <u>0%</u>");
-
-        imgRiskSummary.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jack\\Documents\\GitHub\\CVDCalculator\\resources\\icons\\calculatorStaticHearts\\heart1pct.png")); // NOI18N
 
         lblYouAre.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         lblYouAre.setText("You Are...");
@@ -163,60 +166,48 @@ public class PatientSummaryScreen extends javax.swing.JFrame
     private javax.swing.JEditorPane txtTips;
     // End of variables declaration//GEN-END:variables
 
-    private void DisplayHealthTips(CVDRiskData model)
-    {
+    private void DisplayHealthTips(CVDRiskData model) {
+
         final double LDL_UPPER_BOUND = 3.37;
         final double CHOLESTEROL_UPPER_BOUND = 3.37;
         final double HDL_LOWER_BOUND = 1.30;
         final double DIASTOLIC_BP_UPPER_BOUND = 84;
         final String NEW_LINE = "<br>";
         final String HTML_FONT = "<font face=\"calibri\">";
+        final String CURRENT_DIR = System.getProperty("user.dir");
 
         StringBuilder healthTips = new StringBuilder();
         // Enable HTML formatting
         healthTips.append("<html>");
         healthTips.append(HTML_FONT);
-        
-        if (model != null)
-        {
-            if (model.getCholesterolType().equals(CVDRiskData.LDL) && model.getCholesterolMmolL() > LDL_UPPER_BOUND)
-            {
+
+        if (model != null) {
+            if (model.getCholesterolType().equals(CVDRiskData.LDL) && model.getCholesterolMmolL() > LDL_UPPER_BOUND) {
+                healthTips.append("<b><u>Ldl tips</u></b>");
+                healthTips.append(NEW_LINE);
+                healthTips.append(LoadHealthTips(CURRENT_DIR + "\\resources\\tips\\ldl.txt"));
+            } else if (model.getCholesterolMmolL() > CHOLESTEROL_UPPER_BOUND) {
                 healthTips.append("<b><u>Cholesterol tips</u></b>");
                 healthTips.append(NEW_LINE);
-                healthTips.append(LoadHealthTips(new ArrayList<>()));
-            } else if (model.getCholesterolMmolL() > CHOLESTEROL_UPPER_BOUND)
-            {
-                healthTips.append("<b><u>Cholesterol tips</u></b>");
-                healthTips.append(NEW_LINE);
-                healthTips.append(LoadHealthTips(new ArrayList<>()));
+                healthTips.append(LoadHealthTips(CURRENT_DIR + "\\resources\\tips\\ldl.txt"));
             }
 
-            if (model.getHdlMmolL() < HDL_LOWER_BOUND)
-            {
+            if (model.getHdlMmolL() < HDL_LOWER_BOUND) {
                 healthTips.append("<b><u>HDL tips</u></b>");
                 healthTips.append(NEW_LINE);
-                healthTips.append(LoadHealthTips(new ArrayList<>()));
+                healthTips.append(LoadHealthTips(CURRENT_DIR + "\\resources\\tips\\hdl.txt"));
             }
 
-            if (model.getBloodPressureDiastolicMmHg() > DIASTOLIC_BP_UPPER_BOUND)
-            {
+            if (model.getBloodPressureDiastolicMmHg() > DIASTOLIC_BP_UPPER_BOUND) {
                 healthTips.append("<b><u>Blood Pressure Tips</u></b>");
                 healthTips.append(NEW_LINE);
-                healthTips.append(LoadHealthTips(new ArrayList<>()));
+                healthTips.append(LoadHealthTips(CURRENT_DIR + "\\resources\\tips\\bloodpressure.txt"));
             }
 
-            if (model.isDiabetic())
-            {
-                healthTips.append("<b><u>Tips to manage diabetes</u></b>");
-                healthTips.append(NEW_LINE);
-                healthTips.append(LoadHealthTips(new ArrayList<>()));
-            }
-
-            if (model.isSmoker())
-            {
+            if (model.isSmoker()) {
                 healthTips.append("<b><u>Tips to quit smoking</u></b>");
                 healthTips.append(NEW_LINE);
-                healthTips.append(LoadHealthTips(new ArrayList<>()));
+                healthTips.append(LoadHealthTips(CURRENT_DIR + "\\resources\\tips\\smoking.txt"));
             }
         }
         healthTips.append("</font>");
@@ -225,168 +216,140 @@ public class PatientSummaryScreen extends javax.swing.JFrame
 
     }
 
-    private String LoadHealthTips(ArrayList<String> tips)
-    {
-        StringBuilder healthTips = new StringBuilder();
-        final String NEW_LINE = "<br>";
-
-        for (String line : tips)
-        {
-            if (line != null && !line.isEmpty())
-            {
-                healthTips.append(" - ");
-                healthTips.append(line);
-                healthTips.append(NEW_LINE);
+    private String LoadHealthTips(String filename) {
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(filename));
+            String line;
+            List<String> fileTips = new ArrayList<>();
+            while ((line = in.readLine()) != null) {
+                fileTips.add(line);
+            }
+            StringBuilder healthTips = new StringBuilder();
+            final String NEW_LINE = "<br>";
+            for (String tip : fileTips) {
+                if (fileTips != null && !fileTips.isEmpty()) {
+                    healthTips.append(" - ");
+                    healthTips.append(tip);
+                    healthTips.append(NEW_LINE);
+                }
+            }
+            return healthTips.toString();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        return healthTips.toString();
+        return null;
     }
 
-    private void DisplaySummary(CVDRiskData model)
-    {   
+    private void DisplaySummary(CVDRiskData model) {
         Integer averageRisk = getAverageRisk(model.getAge());
         lblAvgRisk.setText(lblAvgRisk.getText().replace("0%", Integer.toString(averageRisk) + "%"));
-        
+
         Integer patientRisk = model.getRiskPercentage(model.calculateRiskScore());
-        
-        if (patientRisk > averageRisk+1)
-        {
+
+        if (patientRisk > averageRisk + 1) {
             lblRiskSummary.setForeground(Color.RED);
             lblRiskSummary.setText("Above average risk");
-        }            
-        
-        if (patientRisk < averageRisk+1 && patientRisk > averageRisk-1)
-        {
-           lblRiskSummary.setForeground(Color.YELLOW);
-           lblRiskSummary.setText("Average risk");
         }
-        
-        if (patientRisk < averageRisk-1)
-        {
+
+        if (patientRisk < averageRisk + 1 && patientRisk > averageRisk - 1) {
+            lblRiskSummary.setForeground(Color.YELLOW);
+            lblRiskSummary.setText("Average risk");
+        }
+
+        if (patientRisk < averageRisk - 1) {
             lblRiskSummary.setForeground(Color.GREEN);
             lblRiskSummary.setText("Below average risk");
         }
-        
+
         imgRiskSummary.setIcon(loadCorrectIcon(patientRisk));
     }
-    
-    private int getAverageRisk(int age)
-    {        
-        if (age >= 30 && age <= 34)
-        {
+
+    private int getAverageRisk(int age) {
+        if (age >= 30 && age <= 34) {
             return 3;
         }
-        
-        if (age >= 35 && age <= 39)
-        {
-            return 5; 
+
+        if (age >= 35 && age <= 39) {
+            return 5;
         }
-        
-        if (age >= 40 && age <= 44)
-        {
-            return 7; 
+
+        if (age >= 40 && age <= 44) {
+            return 7;
         }
-        
-        if (age >= 45 && age <= 49)
-        {
-            return 11; 
+
+        if (age >= 45 && age <= 49) {
+            return 11;
         }
-        
-        if (age >= 50 && age <= 54)
-        {
-            return 14; 
+
+        if (age >= 50 && age <= 54) {
+            return 14;
         }
-        
-        if (age >= 55 && age <= 59)
-        {
-            return 16; 
+
+        if (age >= 55 && age <= 59) {
+            return 16;
         }
-  
-        if (age >= 60 && age <= 64)
-        {
-            return 21; 
+
+        if (age >= 60 && age <= 64) {
+            return 21;
         }
-        
-        if (age >= 65 && age <= 69)
-        {
-            return 25; 
+
+        if (age >= 65 && age <= 69) {
+            return 25;
         }
-        
-        if (age >= 70)
-        {
-            return 30; 
+
+        if (age >= 70) {
+            return 30;
         }
-        
+
         return 0;
     }
 
-    private Icon loadCorrectIcon(Integer risk)
-    {
+    private Icon loadCorrectIcon(Integer risk) {
         final String WORK_DIR = System.getProperty("user.dir");
-        final String ICON_DIR = "/resources/icons/calculatorStaticHearts/"; 
-        if (risk == 2)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart2pct.png"); 
+        final String ICON_DIR = "/resources/icons/calculatorStaticHearts/";
+        if (risk == 2) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart2pct.png");
+        } else if (risk == 3) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart3pct.png");
+        } else if (risk == 4) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart4pct.png");
+        } else if (risk == 5 || risk == 6) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart6pct.png");
+        } else if (risk == 7 || risk == 8) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart7pct.png");
+        } else if (risk == 9 || risk == 10) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart9pct.png");
+        } else if (risk >= 11 && risk < 14) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart11pct.png");
+        } else if (risk >= 14 && risk <= 17) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart14pct.png");
+        } else if (risk >= 18 && risk <= 21) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart18pct.png");
+        } else if (risk >= 22 && risk <= 26) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart22pct.png");
+        } else if (risk >= 27 && risk <= 32) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart27pct.png");
+        } else if (risk >= 33 && risk <= 39) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart33pct.png");
+        } else if (risk >= 40 && risk <= 46) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart40pct.png");
+        } else if (risk >= 46 && risk <= 55) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart47pct.png");
+        } else if (risk >= 56) {
+            return new ImageIcon(WORK_DIR + ICON_DIR + "heart56pct.png");
         }
-        else if (risk == 3)
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart3pct.png");            
-        }
-        else if (risk == 4)
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart4pct.png");            
-        }
-        else if (risk == 5 ||  risk == 6)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart6pct.png");             
-        }
-        else if (risk == 7 || risk == 8)
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart7pct.png");            
-        }
-        else if (risk == 9 || risk == 10)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart9pct.png");             
-        }
-        else if (risk >= 11 && risk < 14)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart11pct.png");           
-        }
-        else if (risk >= 14 && risk <= 17)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart14pct.png");             
-        }
-        else if (risk >= 18 && risk <= 21 )
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart18pct.png");            
-        }
-        else if (risk >= 22 && risk <= 26)
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart22pct.png");            
-        }
-        else if (risk >= 27 && risk <= 32)
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart27pct.png");            
-        }
-        else if (risk >= 33 && risk <= 39)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart33pct.png");             
-        }
-        else if (risk >= 40 && risk <= 46)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart40pct.png");             
-        }
-        else if (risk >= 46 && risk <= 55)
-        {
-            return new ImageIcon(WORK_DIR+ICON_DIR+"heart47pct.png");             
-        }
-        else if (risk >= 56)
-        {
-             return new ImageIcon(WORK_DIR+ICON_DIR+"heart56pct.png");            
-        }
-           
-        return new ImageIcon(WORK_DIR+ICON_DIR+"heart1pct.png"); 
+
+        return new ImageIcon(WORK_DIR + ICON_DIR + "heart1pct.png");
     }
-    
+
 }

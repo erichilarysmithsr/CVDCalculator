@@ -839,11 +839,11 @@ public class CalculatorScreen extends javax.swing.JFrame
         
         if (lastResult.getCholesterolType().equals(CVDRiskData.CHOL))
         {
-            radioCholesterol.setEnabled(true);
+            radioCholesterol.setSelected(true);
         }
         else
         {
-            radioLdlC.setEnabled(true);
+            radioLdlC.setSelected(true);
         }
 
         checkboxDiabetes.setSelected(lastResult.isDiabetic());

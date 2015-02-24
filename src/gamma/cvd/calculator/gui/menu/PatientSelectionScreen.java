@@ -123,7 +123,7 @@ public class PatientSelectionScreen extends javax.swing.JFrame {
         txtNameSearch = new javax.swing.JTextField();
         lblName = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a patient");
 
         btnLoadPatient.setText("Load Patient");

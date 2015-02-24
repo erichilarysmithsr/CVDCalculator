@@ -60,7 +60,7 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
         txtPassword = new javax.swing.JPasswordField();
         txtPasswordCheck = new javax.swing.JPasswordField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Enter your Registration Key");
 
         lblRegistrationKey.setText("Registration Key");
