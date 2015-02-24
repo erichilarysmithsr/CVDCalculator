@@ -51,6 +51,11 @@ public class MainMenuScreen extends javax.swing.JFrame
         });
 
         btnExistingPatient.setText("Existing Patient");
+        btnExistingPatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExistingPatientActionPerformed(evt);
+            }
+        });
 
         imgMainMenuIcon.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jack\\Documents\\GitHub\\CVDCalculator\\resources\\icons\\logo.png")); // NOI18N
         imgMainMenuIcon.setName("imgCalculatorIcon"); // NOI18N
@@ -87,6 +92,10 @@ public class MainMenuScreen extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnNewPatientActionPerformed
         new PatientRegistrationScreen().setVisible(true);          
     }//GEN-LAST:event_btnNewPatientActionPerformed
+
+    private void btnExistingPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExistingPatientActionPerformed
+       new PatientSelectionScreen().setVisible(true);
+    }//GEN-LAST:event_btnExistingPatientActionPerformed
 
     /**
      * @param args the command line arguments

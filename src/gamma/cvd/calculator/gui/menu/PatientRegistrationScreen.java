@@ -197,6 +197,7 @@ public class PatientRegistrationScreen extends javax.swing.JFrame {
                
                 CVDPatient patient = parser.findPatient(firstName, secondName, genderSymbol, birthDate);
                 new CalculatorScreen(patient).setVisible(true);
+                dispose();
             }
 
         } catch (SAXException | IOException | GeneralSecurityException | XPathExpressionException | TransformerException ex) {
