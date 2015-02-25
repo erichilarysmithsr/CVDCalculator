@@ -775,6 +775,8 @@ public class CalculatorScreen extends javax.swing.JFrame {
         try {
             calculateCvdRisk();
             patientParser.addRiskDataToPatient(patient, model);
+            graph.setCVDPatient(patient);
+            graph.DrawRiskGraph();
         } catch (XPathExpressionException | TransformerException | GeneralSecurityException | IOException ex) {
             Logger.getLogger(CalculatorScreen.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -33,7 +33,12 @@ public class CalculatorGraph {
         this.patient = patient;
         addListeners(selectedCategory);
     }
-
+ 
+    public void setCVDPatient(CVDPatient patient)
+    {
+        this.patient = patient;
+    }
+    
     public void DrawRiskGraph() {
         CategoryDataset dataset = GetRiskDataSet();
         DrawLinegraph(dataset, "Risk");
