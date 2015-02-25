@@ -3,6 +3,7 @@ package gamma.cvd.calculator.gui.calculator;
 import gamma.cvd.calculator.CVDPatient;
 import gamma.cvd.calculator.CVDPatientDataParser;
 import gamma.cvd.calculator.CVDRiskData;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
@@ -24,6 +24,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,6 +41,10 @@ public class CalculatorScreen extends javax.swing.JFrame {
     private CVDRiskData model;
     private CVDPatient patient;
     private CVDPatientDataParser patientParser;
+    private CalculatorGraph graph;
+    
+    // Boolean to avoid event triggers interfering with certain values during init.
+    private boolean firstLoad = true;
 
     /**
      * Creates new form CalculatorScreen
@@ -47,15 +57,18 @@ public class CalculatorScreen extends javax.swing.JFrame {
             groupGenderButtons();
             groupCholesterolButtons();
             addListeners();
-
+            this.graph = new CalculatorGraph(panelGraph, patient, comboStaticOption);                        
+            graph.DrawRiskGraph();
             if (patient.getRiskData().size() > 0) {
+                comboCholesterolMeasurement.setSelectedIndex(1);
+                comboHdlcMeasurement.setSelectedIndex(1);
                 CVDRiskData lastResult = patient.getRiskData().get(patient.getRiskData().size() - 1);
                 loadPatientsResults(lastResult);
                 calculateCvdRisk();
                 loadPreviousAssessmentDates();
-                comboCholesterolMeasurement.setSelectedIndex(1);
-                comboHdlcMeasurement.setSelectedIndex(1);
             }
+
+            firstLoad = false;
         } catch (SAXException | IOException | GeneralSecurityException | XPathExpressionException ex) {
             Logger.getLogger(CalculatorScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,7 +78,6 @@ public class CalculatorScreen extends javax.swing.JFrame {
         // Add listeners to update text field to corresponding slider value upon slider change. 
         addSliderChangeListener(sliderAge, txtAge);
         addSliderChangeListener(sliderBloodPressureDiastolic, txtBloodPressureDiastolic);
-
         addSliderChangeListener(sliderBloodPressureSystolic, txtBloodPressureSystolic);
 
         // Add listeners to update slider upon entering value corresponding in text field
@@ -301,6 +313,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
         panelHistory = new javax.swing.JPanel();
         comboStaticOption = new javax.swing.JComboBox();
         comboAssessmentDate = new javax.swing.JComboBox();
+        panelGraph = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("NHS CVD Calculator");
@@ -666,6 +679,17 @@ public class CalculatorScreen extends javax.swing.JFrame {
 
         comboAssessmentDate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Assessment Date" }));
 
+        javax.swing.GroupLayout panelGraphLayout = new javax.swing.GroupLayout(panelGraph);
+        panelGraph.setLayout(panelGraphLayout);
+        panelGraphLayout.setHorizontalGroup(
+            panelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panelGraphLayout.setVerticalGroup(
+            panelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout panelHistoryLayout = new javax.swing.GroupLayout(panelHistory);
         panelHistory.setLayout(panelHistoryLayout);
         panelHistoryLayout.setHorizontalGroup(
@@ -676,6 +700,10 @@ public class CalculatorScreen extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(comboAssessmentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(291, Short.MAX_VALUE))
+            .addGroup(panelHistoryLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(panelGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelHistoryLayout.setVerticalGroup(
             panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -684,7 +712,9 @@ public class CalculatorScreen extends javax.swing.JFrame {
                 .addGroup(panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboStaticOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboAssessmentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(panelGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -743,6 +773,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
 
     private void btnSaveResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveResultActionPerformed
         try {
+            calculateCvdRisk();
             patientParser.addRiskDataToPatient(patient, model);
         } catch (XPathExpressionException | TransformerException | GeneralSecurityException | IOException ex) {
             Logger.getLogger(CalculatorScreen.class.getName()).log(Level.SEVERE, null, ex);
@@ -776,6 +807,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
     private javax.swing.JPanel panelBloodPressureSystolic;
     private javax.swing.JPanel panelCalculator;
     private javax.swing.JPanel panelCholesterol;
+    private javax.swing.JPanel panelGraph;
     private javax.swing.JPanel panelHdl;
     private javax.swing.JPanel panelHistory;
     private javax.swing.JPanel panelLdl;
@@ -838,20 +870,24 @@ public class CalculatorScreen extends javax.swing.JFrame {
     }
 
     private void loadPreviousAssessmentDates() {
-        for (CVDRiskData data : patient.getRiskData()) {
-            comboAssessmentDate.addItem(data.getTestDate().toString());
-        }
-        comboAssessmentDate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                for (CVDRiskData data : patient.getRiskData()) {
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    LocalDate date = LocalDate.parse(comboAssessmentDate.getSelectedItem().toString(), dtf);
+        patient.getRiskData().stream().forEach((data) -> {
+            comboAssessmentDate.addItem(data.getTestDate().toString() + ": " + data.getTestId());
+        });
 
-                    if (date.equals(data.getTestDate())) {
-                        loadPatientsResults(data);
-                    }
+        comboAssessmentDate.addActionListener((ActionEvent e) -> {
+            firstLoad = true;
+            patient.getRiskData().stream().forEach((data) -> {
+                String selection = comboAssessmentDate.getSelectedItem().toString();
+                String[] selectionData = selection.split(":");
+
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate date = LocalDate.parse(selectionData[0], dtf);
+                int testId = Integer.parseInt(selectionData[1].trim());
+                if (date.equals(data.getTestDate()) && data.getTestId() == testId) {
+                    loadPatientsResults(data);
                 }
-            }
+            firstLoad = false;
+            });
         });
 
     }
@@ -863,69 +899,65 @@ public class CalculatorScreen extends javax.swing.JFrame {
             public void stateChanged(ChangeEvent event) {
                 boolean isMgdlMeasurement = false;
 
+                if (!firstLoad) {
+                    if (measurement.getSelectedItem().toString().equals("mg/dl")) {
+                        isMgdlMeasurement = true;
+                    }
+
+                    if (isMgdlMeasurement) {
+                        // update text field when the slider value changes
+                        JSlider source = (JSlider) event.getSource();
+                        value.setText("" + source.getValue());
+                        if (model != null) {
+                            calculateCvdRisk();
+                        }
+                    } else {
+                        JSlider source = (JSlider) event.getSource();
+                        int sliderValue = source.getValue();
+                        Float actualValue = (float) sliderValue / 100;
+
+                        value.setText(actualValue.toString());
+                        if (model != null) {
+                            calculateCvdRisk();
+                        }
+                    }
+                }
+            }
+        };
+
+        measurement.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                boolean isMgdlMeasurement = false;
+
                 if (measurement.getSelectedItem().toString().equals("mg/dl")) {
                     isMgdlMeasurement = true;
                 }
 
-                if (isMgdlMeasurement)
-                {
-                // update text field when the slider value changes
-                 JSlider source = (JSlider) event.getSource();
-                    value.setText("" + source.getValue());
-                    if (model != null) {
-                        calculateCvdRisk();
-                    }
-                }
-                else
-                {
-                     JSlider source = (JSlider) event.getSource();
-                     int sliderValue = source.getValue();
-                     Float actualValue = (float) sliderValue/100;
-        
-                     value.setText(actualValue.toString());
-                     if (model!= null)
-                     {
-                        calculateCvdRisk();                         
-                     }
-                }
-                
-            }
-        };
+                if (isMgdlMeasurement && value.getText().contains(".")) {
+                    // Mmol to mgdl conversion
+                    int currentValue = slider.getValue();
+                    float normalMmolValue = slider.getValue() / 100;
+                    Integer newValue = Math.round(normalMmolValue / 0.0259f);
 
-        
-         measurement.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) 
-            {
-                boolean isMgdlMeasurement = false;
+                    value.setText(newValue.toString());
+                    slider.setValue(newValue);
+                } else if (!isMgdlMeasurement && !value.getText().contains(".")) {
+                    // Mgdl to Mmol conversion
+                    int currentValue = slider.getValue();
+                    Float newValue = currentValue * 0.0259f;
+                    value.setText(newValue.toString());
+                    slider.setValue(Math.round(newValue * 100));
+                } else if (!isMgdlMeasurement && value.getText().contains(".")) {
+                    // Load mmol slider
+                    String currentValue = value.getText();
+                    Float newValue = Float.parseFloat(currentValue);
+                    int sliderValue = Math.round(newValue * 100);
+                    slider.setValue(sliderValue);
+                }
 
-                    if (measurement.getSelectedItem().toString().equals("mg/dl")) 
-                    {
-                        isMgdlMeasurement = true;
-                    }
-                    
-                    if (isMgdlMeasurement && value.getText().contains("."))
-                    {
-                        // Mmol to mgdl conversion
-                        int currentValue = slider.getValue();
-                        float normalMmolValue = slider.getValue()/100;
-                        Integer newValue = Math.round(normalMmolValue/0.0259f);
-     
-                        value.setText(newValue.toString());
-                        slider.setValue(newValue);
-                     }
-                    else if (!isMgdlMeasurement && !value.getText().contains("."))
-                    {
-                        // Mgdl to Mmol conversion
-                        int currentValue = slider.getValue();
-                        Float newValue = currentValue * 0.0259f;
-                        value.setText(newValue.toString());
-                        slider.setValue(Math.round(newValue*100));
-                    }
-                    
-                 
             }
         });
-                
+
         slider.addChangeListener(listener);
 
         value.addKeyListener(new KeyListener() {
@@ -948,15 +980,17 @@ public class CalculatorScreen extends javax.swing.JFrame {
                         isMgdlMeasurement = true;
                     }
 
-                    if (isMgdlMeasurement) {
-                        Float floatValue = Float.parseFloat(value.getText());
-                        actualValue = Math.round(floatValue);
-                    } else {
-                        Float floatValue = Float.parseFloat(value.getText());
-                        actualValue = Math.round(floatValue * 100);
-                    }
+                    if (!firstLoad) {
+                        if (isMgdlMeasurement) {
+                            Float floatValue = Float.parseFloat(value.getText());
+                            actualValue = Math.round(floatValue);
+                        } else {
+                            Float floatValue = Float.parseFloat(value.getText());
+                            actualValue = Math.round(floatValue * 100);
+                        }
 
-                    slider.setValue(actualValue);
+                        slider.setValue(actualValue);
+                    }
                 } catch (NumberFormatException x) {
                     // Supressed exception - If entering a non alphanumeric character, do not change value.
                 }
@@ -964,4 +998,5 @@ public class CalculatorScreen extends javax.swing.JFrame {
         });
 
     }
+
 }
