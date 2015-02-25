@@ -8,7 +8,10 @@ package gamma.cvd.calculator.gui.calculator;
 import gamma.cvd.calculator.CVDRiskData;
 import gamma.cvd.calculator.gui.GuiUtils;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,9 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -48,8 +53,8 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
         lblRiskSummary = new javax.swing.JLabel();
         lblTenYearLikelihood = new javax.swing.JLabel();
         lblAvgRisk = new javax.swing.JLabel();
-        imgRiskSummary = new javax.swing.JLabel();
         lblYouAre = new javax.swing.JLabel();
+        lblRiskImg = new javax.swing.JLabel();
         panelTips = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtTips = new javax.swing.JEditorPane();
@@ -78,20 +83,18 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
             .addGroup(panelRiskSummaryLayout.createSequentialGroup()
                 .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(45, 45, 45)
+                        .addGap(50, 50, 50)
                         .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(imgRiskSummary))
+                            .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblRiskSummary)))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
                         .addGap(112, 112, 112)
                         .addComponent(lblYouAre))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(lblRiskSummary)))
-                .addContainerGap(58, Short.MAX_VALUE))
+                        .addGap(37, 37, 37)
+                        .addComponent(lblRiskImg)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         panelRiskSummaryLayout.setVerticalGroup(
             panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,13 +103,13 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
                 .addComponent(lblRiskSummary)
                 .addGap(11, 11, 11)
                 .addComponent(lblYouAre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(imgRiskSummary)
-                .addGap(18, 18, 18)
+                .addGap(16, 16, 16)
+                .addComponent(lblRiskImg)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
                 .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
         );
 
         panelTips.setBorder(javax.swing.BorderFactory.createTitledBorder("Tips to improve your score"));
@@ -121,14 +124,14 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
             panelTipsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE))
         );
         panelTipsLayout.setVerticalGroup(
             panelTipsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTipsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -138,7 +141,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelRiskSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelTips, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -155,9 +158,9 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel imgRiskSummary;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAvgRisk;
+    private javax.swing.JLabel lblRiskImg;
     private javax.swing.JLabel lblRiskSummary;
     private javax.swing.JLabel lblTenYearLikelihood;
     private javax.swing.JLabel lblYouAre;
@@ -251,27 +254,44 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
     }
 
     private void DisplaySummary(CVDRiskData model) {
-        Integer averageRisk = getAverageRisk(model.getAge());
-        lblAvgRisk.setText(lblAvgRisk.getText().replace("0%", Integer.toString(averageRisk) + "%"));
-
-        Integer patientRisk = model.getRiskPercentage(model.calculateRiskScore());
-
-        if (patientRisk > averageRisk + 1) {
-            lblRiskSummary.setForeground(Color.RED);
-            lblRiskSummary.setText("Above average risk");
+        try {
+            Integer averageRisk = getAverageRisk(model.getAge());
+            lblAvgRisk.setText(lblAvgRisk.getText().replace("0%", Integer.toString(averageRisk) + "%"));
+            
+            Integer patientRisk = model.getRiskPercentage(model.calculateRiskScore());
+            
+            if (patientRisk > averageRisk + 1) {
+                lblRiskSummary.setForeground(Color.RED);
+                lblRiskSummary.setText("Above average risk");
+            }
+            
+            if (patientRisk < averageRisk + 1 && patientRisk > averageRisk - 1) {
+                lblRiskSummary.setForeground(Color.YELLOW);
+                lblRiskSummary.setText("Average risk");
+            }
+            
+            if (patientRisk < averageRisk - 1) {
+                lblRiskSummary.setForeground(Color.GREEN);
+                lblRiskSummary.setText("Below average risk");
+            }
+            
+           
+            final BufferedImage image = loadCorrectIcon(patientRisk); 
+            
+            Graphics g = image.getGraphics();
+            g.setFont(g.getFont().deriveFont(30f));
+            g.setColor(Color.black);
+            g.drawString(patientRisk.toString()+"%", 100, 130);
+            g.dispose();
+            
+            lblRiskImg.setIcon(new ImageIcon(image));
+            lblRiskImg.revalidate();
+            lblRiskImg.repaint();
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        if (patientRisk < averageRisk + 1 && patientRisk > averageRisk - 1) {
-            lblRiskSummary.setForeground(Color.YELLOW);
-            lblRiskSummary.setText("Average risk");
-        }
-
-        if (patientRisk < averageRisk - 1) {
-            lblRiskSummary.setForeground(Color.GREEN);
-            lblRiskSummary.setText("Below average risk");
-        }
-
-        imgRiskSummary.setIcon(loadCorrectIcon(patientRisk));
+        
     }
 
     private int getAverageRisk(int age) {
@@ -314,42 +334,27 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
         return 0;
     }
 
-    private Icon loadCorrectIcon(Integer risk) {
+    private BufferedImage loadCorrectIcon(Integer risk) throws IOException {
         final String WORK_DIR = System.getProperty("user.dir");
         final String ICON_DIR = "/resources/icons/calculatorStaticHearts/";
-        if (risk == 2) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart2pct.png");
-        } else if (risk == 3) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart3pct.png");
-        } else if (risk == 4) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart4pct.png");
-        } else if (risk == 5 || risk == 6) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart6pct.png");
-        } else if (risk == 7 || risk == 8) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart7pct.png");
-        } else if (risk == 9 || risk == 10) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart9pct.png");
-        } else if (risk >= 11 && risk < 14) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart11pct.png");
-        } else if (risk >= 14 && risk <= 17) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart14pct.png");
-        } else if (risk >= 18 && risk <= 21) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart18pct.png");
-        } else if (risk >= 22 && risk <= 26) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart22pct.png");
-        } else if (risk >= 27 && risk <= 32) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart27pct.png");
-        } else if (risk >= 33 && risk <= 39) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart33pct.png");
-        } else if (risk >= 40 && risk <= 46) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart40pct.png");
-        } else if (risk >= 46 && risk <= 55) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart47pct.png");
-        } else if (risk >= 56) {
-            return new ImageIcon(WORK_DIR + ICON_DIR + "heart56pct.png");
-        }
-
-        return new ImageIcon(WORK_DIR + ICON_DIR + "heart1pct.png");
+        if (risk >= 0 && risk <= 5) 
+        {
+            return ImageIO.read(new File(WORK_DIR + ICON_DIR + "Perfect_Green_Heart.png"));
+        } 
+        else if (risk >= 6 && risk <= 15) 
+        {
+            return ImageIO.read(new File(WORK_DIR + ICON_DIR + "Good_Green_Heart.png"));
+        }        
+        else if (risk >= 16 && risk <= 29) 
+        {
+            return ImageIO.read(new File(WORK_DIR + ICON_DIR + "Average_Yellow_Heart.png"));
+        } 
+        else if (risk >= 30) 
+        {
+            return ImageIO.read(new File(WORK_DIR + ICON_DIR + "Bad_Red_Heart.png"));
+        }       
+        
+        return ImageIO.read(new File(WORK_DIR + ICON_DIR + "Perfect_Green_Heart.png"));
     }
 
 }
