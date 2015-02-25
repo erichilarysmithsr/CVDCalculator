@@ -3,22 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/shakurou/Google%20Drive/University/2014-2015/Dependable%20Systems/Gamma%20Team/CVDCalculator/src/gamma/cvd/calculator/gui/calculator/CalculatorScreen.java</file>
-            <file>file:/Users/shakurou/Google%20Drive/University/2014-2015/Dependable%20Systems/Gamma%20Team/CVDCalculator/src/gamma/cvd/calculator/CVDPatient.java</file>
-            <file>file:/Users/shakurou/Google%20Drive/University/2014-2015/Dependable%20Systems/Gamma%20Team/CVDCalculator/src/gamma/cvd/calculator/CVDPatientDataParser.java</file>
-            <file>file:/Users/shakurou/Google%20Drive/University/2014-2015/Dependable%20Systems/Gamma%20Team/CVDCalculator/src/gamma/cvd/calculator/CVDRiskData.java</file>
-            <file>file:/Users/shakurou/Google%20Drive/University/2014-2015/Dependable%20Systems/Gamma%20Team/CVDCalculator/src/gamma/cvd/dbdecrypter/DBDecrypter.java</file>
-        </group>
-    </open-files>
-</project-private>
-<?xml version="1.0" encoding="UTF-8"?>
-<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Jack/Documents/GitHub/CVDCalculator/src/gamma/cvd/calculator/CVDRiskData.java</file>
-            <file>file:/C:/Users/Jack/Documents/GitHub/CVDCalculator/src/gamma/cvd/calculator/gui/menu/PatientRegistrationScreen.java</file>
-            <file>file:/C:/Users/Jack/Documents/GitHub/CVDCalculator/src/gamma/cvd/calculator/gui/calculator/CalculatorScreen.java</file>
+            <file>file:/C:/Users/Erling/Google%20Drive/University/2014-2015/Dependable%20Systems/Gamma%20Team/CVDCalculator/src/gamma/cvd/calculator/print/CVDPrint.java</file>
         </group>
     </open-files>
 </project-private>
