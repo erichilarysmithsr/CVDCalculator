@@ -33,12 +33,11 @@ public class CalculatorGraph {
         this.patient = patient;
         addListeners(selectedCategory);
     }
- 
-    public void setCVDPatient(CVDPatient patient)
-    {
+
+    public void setCVDPatient(CVDPatient patient) {
         this.patient = patient;
     }
-    
+
     public void DrawRiskGraph() {
         CategoryDataset dataset = GetRiskDataSet();
         DrawLinegraph(dataset, "Risk");
@@ -67,7 +66,7 @@ public class CalculatorGraph {
     private void DrawLinegraph(CategoryDataset dataset, String label) {
         panel.removeAll();
         panel.revalidate();
-        
+
         JFreeChart lineChart = ChartFactory.createLineChart(
                 label,
                 "Dates", "Recorded Value",
@@ -88,10 +87,18 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for (int i = 0; i < patient.getRiskData().size(); i++) {
-            CVDRiskData data = patient.getRiskData().get(i);
-            int score = data.calculateRiskScore();
-            dataset.addValue(data.getRiskPercentage(score), "Risk", data.getTestDate() + " " + i);
+        if (patient.getRiskData().size() > 4) {
+            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                int score = data.calculateRiskScore();
+                dataset.addValue(data.getRiskPercentage(score), "Risk", data.getTestDate() + " " + (i+1));
+            }
+        } else {
+            for (int i = 0; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                int score = data.calculateRiskScore();
+                dataset.addValue(data.getRiskPercentage(score), "Risk", data.getTestDate() + " " + (i+1));
+            }
         }
 
         return dataset;
@@ -102,9 +109,16 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for (int i = 0; i < patient.getRiskData().size(); i++) {
-            CVDRiskData data = patient.getRiskData().get(i);
-            dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", data.getTestDate() + " " + i);
+        if (patient.getRiskData().size() > 4) {
+            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", data.getTestDate() + " " + (i+1));
+            }
+        } else {
+            for (int i = 0; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", data.getTestDate() + " " + (i+1));
+            }
         }
 
         return dataset;
@@ -114,9 +128,16 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for (int i = 0; i < patient.getRiskData().size(); i++) {
-            CVDRiskData data = patient.getRiskData().get(i);
-            dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", data.getTestDate() + " " + i);
+        if (patient.getRiskData().size() > 4) {
+            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", data.getTestDate() + " " + (i+1));
+            }
+        } else {
+            for (int i = 0; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", data.getTestDate() + " " + (i+1));
+            }
         }
 
         return dataset;
@@ -126,9 +147,16 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for (int i = 0; i < patient.getRiskData().size(); i++) {
-            CVDRiskData data = patient.getRiskData().get(i);
-            dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", data.getTestDate() + " " + i);
+        if (patient.getRiskData().size() > 4) {
+            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", data.getTestDate() + " " + (i+1));
+            }
+        } else {
+            for (int i = 0; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", data.getTestDate() + " " + (i+1));
+            }
         }
 
         return dataset;
@@ -138,9 +166,16 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for (int i = 0; i < patient.getRiskData().size(); i++) {
-            CVDRiskData data = patient.getRiskData().get(i);
-            dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", data.getTestDate() + " " + i);
+        if (patient.getRiskData().size() > 4) {
+            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", data.getTestDate() + " " + (i+1));
+            }
+        } else {
+            for (int i = 0; i < patient.getRiskData().size(); i++) {
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", data.getTestDate() + " " + (i+1));
+            }
         }
 
         return dataset;

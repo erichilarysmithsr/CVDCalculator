@@ -5,6 +5,7 @@
  */
 package gamma.cvd.calculator.gui.calculator;
 
+import gamma.cvd.calculator.CVDPatient;
 import gamma.cvd.calculator.CVDRiskData;
 import gamma.cvd.calculator.gui.GuiUtils;
 import java.awt.Color;
@@ -20,20 +21,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-
+ 
 /**
  *
  * @author Jack
  */
 public class PatientSummaryScreen extends javax.swing.JFrame {
 
-    PatientSummaryScreen(CVDRiskData model) {
+    PatientSummaryScreen(CVDRiskData model, CVDPatient patient) {
         GuiUtils.centerScreen(this);
         initComponents();
+        lblNamePlaceholder.setText(patient.getFirstName()+" "+patient.getLastName());
         DisplayHealthTips(model);
         DisplaySummary(model);
 
@@ -54,6 +54,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
         lblTenYearLikelihood = new javax.swing.JLabel();
         lblAvgRisk = new javax.swing.JLabel();
         lblYouAre = new javax.swing.JLabel();
+        lblNamePlaceholder = new javax.swing.JLabel();
         lblRiskImg = new javax.swing.JLabel();
         panelTips = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -76,6 +77,9 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
         lblYouAre.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         lblYouAre.setText("You Are...");
 
+        lblNamePlaceholder.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblNamePlaceholder.setText("Name Placeholder");
+
         javax.swing.GroupLayout panelRiskSummaryLayout = new javax.swing.GroupLayout(panelRiskSummary);
         panelRiskSummary.setLayout(panelRiskSummaryLayout);
         panelRiskSummaryLayout.setHorizontalGroup(
@@ -87,12 +91,13 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
                         .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblRiskSummary)))
+                            .addComponent(lblRiskSummary)
+                            .addComponent(lblNamePlaceholder)))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(112, 112, 112)
+                        .addGap(109, 109, 109)
                         .addComponent(lblYouAre))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                        .addGap(37, 37, 37)
+                        .addGap(27, 27, 27)
                         .addComponent(lblRiskImg)))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -100,12 +105,14 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
             panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRiskSummaryLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(lblNamePlaceholder)
+                .addGap(14, 14, 14)
                 .addComponent(lblRiskSummary)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblYouAre)
-                .addGap(16, 16, 16)
+                .addGap(7, 7, 7)
                 .addComponent(lblRiskImg)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
                 .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -160,6 +167,7 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAvgRisk;
+    private javax.swing.JLabel lblNamePlaceholder;
     private javax.swing.JLabel lblRiskImg;
     private javax.swing.JLabel lblRiskSummary;
     private javax.swing.JLabel lblTenYearLikelihood;

@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -24,12 +25,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.xml.sax.SAXException;
 
 /**
@@ -59,6 +54,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
             addListeners();
             this.graph = new CalculatorGraph(panelGraph, patient, comboStaticOption);                        
             graph.DrawRiskGraph();
+            lblNamePlaceholder.setText(patient.getFirstName()+" "+patient.getLastName());
             if (patient.getRiskData().size() > 0) {
                 comboCholesterolMeasurement.setSelectedIndex(1);
                 comboHdlcMeasurement.setSelectedIndex(1);
@@ -310,10 +306,13 @@ public class CalculatorScreen extends javax.swing.JFrame {
         txtBloodPressureSystolic = new javax.swing.JTextField();
         checkboxDiabetes = new javax.swing.JCheckBox();
         btnCalculateRisk = new javax.swing.JButton();
+        comboAssessmentDate = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        lblNamePlaceholder = new javax.swing.JLabel();
         panelHistory = new javax.swing.JPanel();
         comboStaticOption = new javax.swing.JComboBox();
-        comboAssessmentDate = new javax.swing.JComboBox();
         panelGraph = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("NHS CVD Calculator");
@@ -459,7 +458,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
             }
         });
 
-        btnSummary.setText("Patient Summary");
+        btnSummary.setText("View Patient Summary");
         btnSummary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSummaryActionPerformed(evt);
@@ -585,6 +584,13 @@ public class CalculatorScreen extends javax.swing.JFrame {
             }
         });
 
+        comboAssessmentDate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Assessment Date" }));
+
+        jLabel2.setText("Select a previous assesment");
+
+        lblNamePlaceholder.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblNamePlaceholder.setText("Full name Placeholder");
+
         javax.swing.GroupLayout panelCalculatorLayout = new javax.swing.GroupLayout(panelCalculator);
         panelCalculator.setLayout(panelCalculatorLayout);
         panelCalculatorLayout.setHorizontalGroup(
@@ -611,17 +617,14 @@ public class CalculatorScreen extends javax.swing.JFrame {
                                         .addComponent(btnCalculateRisk, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(btnSaveResult, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnSummary, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelCalculatorLayout.createSequentialGroup()
                         .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelCalculatorLayout.createSequentialGroup()
-                                .addGap(19, 19, 19)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblGender)
-                                    .addGroup(panelCalculatorLayout.createSequentialGroup()
-                                        .addComponent(radioGenderMale)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(radioGenderFemale))))
+                                    .addComponent(jLabel2)
+                                    .addComponent(comboAssessmentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panelCalculatorLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(panelBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -630,31 +633,32 @@ public class CalculatorScreen extends javax.swing.JFrame {
                                 .addComponent(checkboxSmoker)
                                 .addGap(53, 53, 53)
                                 .addComponent(checkboxDiabetes)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(27, 27, 27)))
                 .addContainerGap())
+            .addGroup(panelCalculatorLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelCalculatorLayout.createSequentialGroup()
+                        .addComponent(lblGender)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelCalculatorLayout.createSequentialGroup()
+                        .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNamePlaceholder)
+                            .addGroup(panelCalculatorLayout.createSequentialGroup()
+                                .addComponent(radioGenderMale)
+                                .addGap(18, 18, 18)
+                                .addComponent(radioGenderFemale)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         panelCalculatorLayout.setVerticalGroup(
             panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCalculatorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblGender)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioGenderMale)
-                    .addComponent(radioGenderFemale))
-                .addGap(14, 14, 14)
-                .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelCalculatorLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, 105, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)
-                        .addComponent(panelBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(panelCalculatorLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(1, 1, 1)
+                        .addComponent(comboAssessmentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
                         .addComponent(lblCvdTenYearRisk)
                         .addGap(8, 8, 8)
                         .addComponent(lblCvdRisk)
@@ -664,7 +668,25 @@ public class CalculatorScreen extends javax.swing.JFrame {
                         .addComponent(btnSaveResult)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSummary)
-                        .addGap(50, 50, 50)))
+                        .addGap(50, 50, 50))
+                    .addGroup(panelCalculatorLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(lblNamePlaceholder)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblGender)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(radioGenderMale)
+                            .addComponent(radioGenderFemale))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panelLdl, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(panelHdl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addComponent(panelBloodPressureSystolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)))
                 .addComponent(panelBloodPressureDiastolic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(panelCalculatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -677,18 +699,18 @@ public class CalculatorScreen extends javax.swing.JFrame {
 
         comboStaticOption.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Risk", "Cholesterol/LDL-C", "HDL-C", "Blood Pressure (Systolic)", "Blood Pressure (Diastolic)" }));
 
-        comboAssessmentDate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Assessment Date" }));
-
         javax.swing.GroupLayout panelGraphLayout = new javax.swing.GroupLayout(panelGraph);
         panelGraph.setLayout(panelGraphLayout);
         panelGraphLayout.setHorizontalGroup(
             panelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 662, Short.MAX_VALUE)
         );
         panelGraphLayout.setVerticalGroup(
             panelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
         );
+
+        jLabel1.setText("Select a health category to display");
 
         javax.swing.GroupLayout panelHistoryLayout = new javax.swing.GroupLayout(panelHistory);
         panelHistory.setLayout(panelHistoryLayout);
@@ -696,22 +718,23 @@ public class CalculatorScreen extends javax.swing.JFrame {
             panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelHistoryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(comboStaticOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(comboAssessmentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(291, Short.MAX_VALUE))
-            .addGroup(panelHistoryLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(panelGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHistoryLayout.createSequentialGroup()
+                        .addGap(0, 21, Short.MAX_VALUE)
+                        .addComponent(panelGraph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelHistoryLayout.createSequentialGroup()
+                        .addGroup(panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(comboStaticOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelHistoryLayout.setVerticalGroup(
             panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelHistoryLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboStaticOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboAssessmentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(comboStaticOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(panelGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -725,7 +748,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
                 .addComponent(panelCalculator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -758,7 +781,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
     private void btnSummaryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSummaryActionPerformed
     {//GEN-HEADEREND:event_btnSummaryActionPerformed
         calculateCvdRisk();
-        new PatientSummaryScreen(model).setVisible(true);
+        new PatientSummaryScreen(model, patient).setVisible(true);
     }//GEN-LAST:event_btnSummaryActionPerformed
 
     private void txtCholesterolActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtCholesterolActionPerformed
@@ -777,6 +800,10 @@ public class CalculatorScreen extends javax.swing.JFrame {
             patientParser.addRiskDataToPatient(patient, model);
             graph.setCVDPatient(patient);
             graph.DrawRiskGraph();
+            loadPreviousAssessmentDates();
+            
+            JOptionPane.showMessageDialog(this, "Assessment succesfully saved", "Assessment saved", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (XPathExpressionException | TransformerException | GeneralSecurityException | IOException ex) {
             Logger.getLogger(CalculatorScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -797,6 +824,8 @@ public class CalculatorScreen extends javax.swing.JFrame {
     private javax.swing.JComboBox comboCholesterolMeasurement;
     private javax.swing.JComboBox comboHdlcMeasurement;
     private javax.swing.JComboBox comboStaticOption;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblAge;
     private javax.swing.JLabel lblBloodPressureDiastolic;
     private javax.swing.JLabel lblBloodPressureSystolic;
@@ -804,6 +833,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
     private javax.swing.JLabel lblCvdTenYearRisk;
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblHdl;
+    private javax.swing.JLabel lblNamePlaceholder;
     private javax.swing.JPanel panelAge;
     private javax.swing.JPanel panelBloodPressureDiastolic;
     private javax.swing.JPanel panelBloodPressureSystolic;
@@ -879,16 +909,20 @@ public class CalculatorScreen extends javax.swing.JFrame {
         comboAssessmentDate.addActionListener((ActionEvent e) -> {
             firstLoad = true;
             patient.getRiskData().stream().forEach((data) -> {
-                String selection = comboAssessmentDate.getSelectedItem().toString();
-                String[] selectionData = selection.split(":");
+                if (comboAssessmentDate.getSelectedIndex() > 0)
+                {
+                    String selection = comboAssessmentDate.getSelectedItem().toString();
+                    String[] selectionData = selection.split(":");
 
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate date = LocalDate.parse(selectionData[0], dtf);
-                int testId = Integer.parseInt(selectionData[1].trim());
-                if (date.equals(data.getTestDate()) && data.getTestId() == testId) {
-                    loadPatientsResults(data);
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate date = LocalDate.parse(selectionData[0], dtf);
+                    int testId = Integer.parseInt(selectionData[1].trim());
+                    if (date.equals(data.getTestDate()) && data.getTestId() == testId) {
+                        loadPatientsResults(data);
+                    }
                 }
             firstLoad = false;
+            
             });
         });
 
