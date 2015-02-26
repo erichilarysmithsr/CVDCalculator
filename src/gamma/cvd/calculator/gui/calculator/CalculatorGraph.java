@@ -168,13 +168,13 @@ public class CalculatorGraph {
 
         if (patient.getRiskData().size() > 20) {
             for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
-                CVDRiskData data = patient.getRiskData().get(i+1);
-                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i));
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i+1));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
-                CVDRiskData data = patient.getRiskData().get(i+1);
-                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i));
+                CVDRiskData data = patient.getRiskData().get(i);
+                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i+1));
             }
         }
 
