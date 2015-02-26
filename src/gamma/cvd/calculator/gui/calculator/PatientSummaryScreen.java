@@ -209,27 +209,17 @@ public class PatientSummaryScreen extends javax.swing.JFrame
             
             if (returnValue == JFileChooser.APPROVE_OPTION)
             {
-                try {
-                    String fileName = chooser.getSelectedFile().getPath();
-                    CVDPrint print = new CVDPrint();
-                    print.savePatientDataToPdf(patient, fileName+".pdf");
-                } catch (IOException | COSVisitorException ex) 
-                {
-                    Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                String fileName = chooser.getSelectedFile().getPath();
+                CVDPrint print = new CVDPrint();
+                print.savePatientDataToPdf(patient, fileName+".pdf");
             }
             
 
     }//GEN-LAST:event_btnSaveResultsActionPerformed
 
     private void btnPrintResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintResultsActionPerformed
-       try {
-           CVDPrint print = new CVDPrint();
-           print.printPatientData(patient);
-       } catch (IOException | PrinterException ex) 
-       {
-           Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
-       }
+        CVDPrint print = new CVDPrint();
+        print.printPatientData(patient);
     }//GEN-LAST:event_btnPrintResultsActionPerformed
 
 
