@@ -8,9 +8,11 @@ package gamma.cvd.calculator.gui.calculator;
 import gamma.cvd.calculator.CVDPatient;
 import gamma.cvd.calculator.CVDRiskData;
 import gamma.cvd.calculator.gui.GuiUtils;
+import gamma.cvd.calculator.print.CVDPrint;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.print.PrinterException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,16 +23,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
- import javax.swing.ImageIcon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import org.apache.pdfbox.exceptions.COSVisitorException;
  
 /**
  *
  * @author Jack
  */
-public class PatientSummaryScreen extends javax.swing.JFrame {
+public class PatientSummaryScreen extends javax.swing.JFrame 
+{
+   private CVDPatient patient; 
 
-    PatientSummaryScreen(CVDRiskData model, CVDPatient patient) {
+        
+    PatientSummaryScreen(CVDRiskData model, CVDPatient patient) 
+    {
+        this.patient = patient;
+        
         GuiUtils.centerScreen(this);
         initComponents();
         lblNamePlaceholder.setText(patient.getFirstName()+" "+patient.getLastName());
@@ -56,6 +66,8 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
         lblYouAre = new javax.swing.JLabel();
         lblNamePlaceholder = new javax.swing.JLabel();
         lblRiskImg = new javax.swing.JLabel();
+        btnSaveResults = new javax.swing.JButton();
+        btnPrintResults = new javax.swing.JButton();
         panelTips = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtTips = new javax.swing.JEditorPane();
@@ -80,6 +92,20 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
         lblNamePlaceholder.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblNamePlaceholder.setText("Name Placeholder");
 
+        btnSaveResults.setText("Save results to Pdf");
+        btnSaveResults.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveResultsActionPerformed(evt);
+            }
+        });
+
+        btnPrintResults.setText("Print Results");
+        btnPrintResults.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintResultsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelRiskSummaryLayout = new javax.swing.GroupLayout(panelRiskSummary);
         panelRiskSummary.setLayout(panelRiskSummaryLayout);
         panelRiskSummaryLayout.setHorizontalGroup(
@@ -92,7 +118,9 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
                             .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblRiskSummary)
-                            .addComponent(lblNamePlaceholder)))
+                            .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(lblNamePlaceholder))))
                     .addGroup(panelRiskSummaryLayout.createSequentialGroup()
                         .addGap(109, 109, 109)
                         .addComponent(lblYouAre))
@@ -100,23 +128,33 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addComponent(lblRiskImg)))
                 .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(panelRiskSummaryLayout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(btnSaveResults)
+                .addGap(18, 18, 18)
+                .addComponent(btnPrintResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(40, 40, 40))
         );
         panelRiskSummaryLayout.setVerticalGroup(
             panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRiskSummaryLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(19, 19, 19)
                 .addComponent(lblNamePlaceholder)
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblRiskSummary)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblYouAre)
                 .addGap(7, 7, 7)
                 .addComponent(lblRiskImg)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(lblTenYearLikelihood, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addComponent(lblAvgRisk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addGap(18, 18, 18)
+                .addGroup(panelRiskSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveResults)
+                    .addComponent(btnPrintResults))
+                .addGap(16, 16, 16))
         );
 
         panelTips.setBorder(javax.swing.BorderFactory.createTitledBorder("Tips to improve your score"));
@@ -157,14 +195,47 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelTips, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelRiskSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelRiskSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 234, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveResultsActionPerformed
+            JFileChooser chooser = new JFileChooser();
+            int returnValue = chooser.showSaveDialog(this);
+            
+            if (returnValue == JFileChooser.APPROVE_OPTION)
+            {
+                try {
+                    String fileName = chooser.getSelectedFile().getPath();
+                    CVDPrint print = new CVDPrint();
+                    print.savePatientDataToPdf(patient, fileName+".pdf");
+                } catch (IOException | COSVisitorException ex) 
+                {
+                    Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+
+    }//GEN-LAST:event_btnSaveResultsActionPerformed
+
+    private void btnPrintResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintResultsActionPerformed
+       try {
+           CVDPrint print = new CVDPrint();
+           print.printPatientData(patient);
+       } catch (IOException | PrinterException ex) 
+       {
+           Logger.getLogger(PatientSummaryScreen.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }//GEN-LAST:event_btnPrintResultsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPrintResults;
+    private javax.swing.JButton btnSaveResults;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAvgRisk;
     private javax.swing.JLabel lblNamePlaceholder;
@@ -268,17 +339,17 @@ public class PatientSummaryScreen extends javax.swing.JFrame {
             
             Integer patientRisk = model.getRiskPercentage(model.calculateRiskScore());
             
-            if (patientRisk > averageRisk + 1) {
+            if (patientRisk >= averageRisk + 1) {
                 lblRiskSummary.setForeground(Color.RED);
                 lblRiskSummary.setText("Above average risk");
             }
             
-            if (patientRisk < averageRisk + 1 && patientRisk > averageRisk - 1) {
+            if (patientRisk <= averageRisk + 1 && patientRisk >= averageRisk - 1) {
                 lblRiskSummary.setForeground(Color.YELLOW);
                 lblRiskSummary.setText("Average risk");
             }
             
-            if (patientRisk < averageRisk - 1) {
+            if (patientRisk <= averageRisk - 1) {
                 lblRiskSummary.setForeground(Color.GREEN);
                 lblRiskSummary.setText("Below average risk");
             }
