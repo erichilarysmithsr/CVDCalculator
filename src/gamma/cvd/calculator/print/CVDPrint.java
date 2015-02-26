@@ -30,6 +30,16 @@ public class CVDPrint {
     public CVDPrint() {
     }
     
+    private void writeLine(String left, String right, PDPageContentStream cos)
+            throws IOException {
+        int lead = 54 - (left.length() + right.length());
+        cos.drawString(left + " ");
+        for (int i = 0; i < lead; i++) {
+            cos.drawString(".");
+        }
+        cos.drawString(" " + right);
+    }
+    
     public void createPdfDocument(CVDPatient patient) throws IOException {
         this.document = new PDDocument();
         List<PDPage> pageList = new ArrayList<>();
@@ -58,74 +68,33 @@ public class CVDPrint {
         
         cos.beginText();
         cos.setFont(fontCourier, 12);
-        cos.moveTextPositionByAmount(
-                leftMargin,
+        cos.moveTextPositionByAmount(leftMargin,
                 rect.getHeight() - patientLineSpace - lineSpace * ++line);
-        cos.drawString("Patient no.: ");
-        int lead = 42;
-        if (patient.getPatientId() > 9 && patient.getPatientId() < 100) {
-            lead--;
-        } else if (patient.getPatientId() > 99 &&
-                patient.getPatientId() < 1000) {
-            lead = lead - 2;
-        } else if (patient.getPatientId() > 999 &&
-                patient.getPatientId() < 10000) {
-            lead = lead - 3;
-        } else if (patient.getPatientId() > 9999) {
-            lead = lead - 3;
-        }
-        for (int i = 0; i < lead; i++) {
-            cos.drawString(".");
-        }
-        cos.drawString(" " + patient.getPatientId());
+        writeLine("Patient no.:", String.valueOf(patient.getPatientId()), cos);
         cos.endText();
         
         cos.beginText();
-        cos.moveTextPositionByAmount(
-                leftMargin,
+        cos.moveTextPositionByAmount(leftMargin,
                 rect.getHeight() - patientLineSpace - lineSpace * ++line);
-        cos.drawString("First name: ");
-        lead = 44 - patient.getFirstName().length();
-        for (int i = 0; i < lead; i++) {
-            cos.drawString(".");
-        }
-        cos.drawString(" " + patient.getFirstName());
+        writeLine("First name:", patient.getFirstName(), cos);
         cos.endText();
         
         cos.beginText();
-        cos.moveTextPositionByAmount(
-                leftMargin,
+        cos.moveTextPositionByAmount(leftMargin,
                 rect.getHeight() - patientLineSpace - lineSpace * ++line);
-        cos.drawString("Last name: ");
-        lead = 45 - patient.getLastName().length();
-        for (int i = 0; i < lead; i++) {
-            cos.drawString(".");
-        }
-        cos.drawString(" " + patient.getLastName());
+        writeLine("Last name:", patient.getLastName(), cos);
         cos.endText();
         
         cos.beginText();
-        cos.moveTextPositionByAmount(
-                leftMargin,
+        cos.moveTextPositionByAmount(leftMargin,
                 rect.getHeight() - patientLineSpace - lineSpace * ++line);
-        cos.drawString("Date of birth: ");
-        lead = 31;
-        for (int i = 0; i < lead; i++) {
-            cos.drawString(".");
-        }
-        cos.drawString(" " + patient.getBirthdate().toString());
+        writeLine("Date of birth:", patient.getBirthdate().toString(), cos);
         cos.endText();
         
         cos.beginText();
-        cos.moveTextPositionByAmount(
-                leftMargin,
+        cos.moveTextPositionByAmount(leftMargin,
                 rect.getHeight() - patientLineSpace - lineSpace * ++line);
-        cos.drawString( "Sex: ");
-        lead = 50;
-        for (int i = 0; i < lead; i++) {
-            cos.drawString(".");
-        }
-        cos.drawString(" " + patient.getSex());
+        writeLine("Sex:", String.valueOf(patient.getSex()), cos);
         cos.endText();
         int n = 0;
         for (CVDRiskData data : patient.getRiskData()) {
@@ -152,193 +121,91 @@ public class CVDPrint {
             
             cos.beginText();
             cos.setFont(fontCourierBold, 12);
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Test ID: ");
-            lead = 46;
-            if (data.getTestId() > 9) {
-                lead--;
-            }
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + data.getTestId());
+            writeLine("Test ID:", String.valueOf(data.getTestId()), cos);
             cos.endText();
             
             cos.beginText();
             cos.setFont(fontCourier, 12);
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Test date: ");
-            lead = 35;
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + data.getTestDate().toString());
+            writeLine("Test date:", data.getTestDate().toString(), cos);
             cos.endText();
             
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Cholesterol type: ");
-            if (data.getCholesterolType().equalsIgnoreCase(CVDRiskData.LDL)) {
-                lead = 15;
-            } else {
-                lead = 27;
-            }
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + data.getCholesterolType());
+            writeLine("Cholesterol type:", data.getCholesterolType(), cos);
             cos.endText();
             
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Cholesterol mmol/L: ");
-            if (data.getCholesterolMmolL() < 10) {
-                lead = 32;
-            } else {
-                lead = 31;
-            }
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " +
-                    String.format("%.2f", data.getCholesterolMmolL()));
+            writeLine("Cholesterol mmol/L:",
+                    String.format("%.2f", data.getCholesterolMmolL()), cos);
             cos.endText();
             
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("HDL mmol/L: ");
-            if (data.getHdlMmolL() < 10) {
-                lead = 40;
-            } else {
-                lead = 39;
-            }
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " +
-                    String.format("%.2f", data.getHdlMmolL()));
+            writeLine("HDL mmol/L:",
+                    String.format("%.2f", data.getHdlMmolL()), cos);
             cos.endText();
             
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Diastolic blood pressure: ");
-            if (data.getBloodPressureDiastolicMmHg() < 100) {
-                lead = 28;
-            } else {
-                lead = 27;
-            }
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + data.getBloodPressureDiastolicMmHg());
+            writeLine("Diastolic blood pressure:",
+                    String.valueOf(data.getBloodPressureDiastolicMmHg()), cos);
             cos.endText();
             
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Systolic blood pressure: ");
-            if (data.getBloodPressureSystolicMmHg()< 100) {
-                lead = 29;
-            } else {
-                lead = 28;
-            }
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + data.getBloodPressureSystolicMmHg());
+            writeLine("Systolic blood pressure:", 
+                    String.valueOf(data.getBloodPressureSystolicMmHg()), cos);
             cos.endText();
             
-            String smoker;
+            cos.beginText();
+            cos.moveTextPositionByAmount(leftMargin,
+                    rect.getHeight() - testDataLineSpace - lineSpace * ++line);
             if (data.isSmoker()) {
-                smoker = "Yes";
-                lead = 34;
+                writeLine("Patient is smoker:", "Yes", cos);
             } else {
-                smoker = "No";
-                lead = 35;
+                writeLine("Patient is smoker:", "No", cos);
             }
-            
-            cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
-                    rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Patient is smoker: ");
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + smoker);
             cos.endText();
             
-            String diabetic;
-            if (data.isDiabetic()) {
-                diabetic = "Yes";
-                lead = 32;
-            } else {
-                diabetic = "No";
-                lead = 33;
-            }
-            
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Patient is diabetic: ");
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
+            if (data.isDiabetic()) {
+                writeLine("Patient is diabetic:", "Yes", cos);
+            } else {
+                writeLine("Patient is diabetic:", "No", cos);
             }
-            cos.drawString(" " + diabetic);
             cos.endText();
             
             int score = data.calculateRiskScore();
-            if (score < 0 || score > 9) {
-                lead = 42;
-            } else {
-                lead = 43;
-            }
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Risk score: ");
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + score);
+            writeLine("Risk score:", String.valueOf(score), cos);
             cos.endText();
             
             int riskPercentage = data.getRiskPercentage(score);
-            if (riskPercentage < 10) {
-                lead = 36;
-            } else {
-                lead = 35;
-            }
             cos.beginText();
-            cos.moveTextPositionByAmount(
-                    leftMargin,
+            cos.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.drawString("Risk percentage: ");
-            for (int i = 0; i < lead; i++) {
-                cos.drawString(".");
-            }
-            cos.drawString(" " + riskPercentage + " %");
+            writeLine("Risk percentage:",
+                    new StringBuilder().append(riskPercentage).append(" %")
+                            .toString() , cos);
             cos.endText();
             n++;
         }
-        
         cos.close();
-}
+    }
     
     public void savePatientDataToPdf(CVDPatient patient, String outputFileName)
             throws IOException, COSVisitorException {
