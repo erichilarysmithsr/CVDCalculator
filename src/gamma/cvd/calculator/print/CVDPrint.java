@@ -11,6 +11,8 @@ import java.awt.print.PrinterException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -24,8 +26,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
  * @author Erling Austvoll, K0927253
  */
 public class CVDPrint {
-    
-    private PDDocument document;
 
     public CVDPrint() {
     }
@@ -40,18 +40,19 @@ public class CVDPrint {
         cos.drawString(" " + right);
     }
     
-    public void createPdfDocument(CVDPatient patient) throws IOException {
-        this.document = new PDDocument();
+    private PDDocument createPdfDocument(CVDPatient patient)
+            throws IOException {
+        PDDocument document = new PDDocument();
         List<PDPage> pageList = new ArrayList<>();
         PDPage page1 = new PDPage(PDPage.PAGE_SIZE_A4);
         pageList.add(page1);
         PDRectangle rect = pageList.get(0).getMediaBox();
-        this.document.addPage(pageList.get(0));
+        document.addPage(pageList.get(0));
         PDFont fontHelveticaBold = PDType1Font.HELVETICA_BOLD;
         PDFont fontCourier = PDType1Font.COURIER;
         PDFont fontCourierBold = PDType1Font.COURIER_BOLD;
         PDPageContentStream cos =
-                new PDPageContentStream(this.document, pageList.get(0));
+                new PDPageContentStream(document, pageList.get(0));
         int leftMargin = 50;
         int initialLineSpace = 70;
         int lineSpace = 15;
@@ -102,8 +103,8 @@ public class CVDPrint {
                 cos.close();
                 PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
                 pageList.add(page);
-                this.document.addPage(pageList.get(n/3));
-                cos = new PDPageContentStream(this.document, pageList.get(n/3));
+                document.addPage(pageList.get(n/3));
+                cos = new PDPageContentStream(document, pageList.get(n/3));
                 line = 0;
                 cos.beginText();
                 cos.setFont(fontHelveticaBold, 18);
@@ -205,19 +206,25 @@ public class CVDPrint {
             n++;
         }
         cos.close();
+        return document;
     }
     
-    public void savePatientDataToPdf(CVDPatient patient, String outputFileName)
-            throws IOException, COSVisitorException {
-        createPdfDocument(patient);
-        this.document.save(outputFileName);
-        this.document.close();
+    public void savePatientDataToPdf(CVDPatient patient,
+            String outputFileName) {
+        try (PDDocument document = createPdfDocument(patient)) {
+            document.save(outputFileName);
+        } catch (IOException | COSVisitorException ex) {
+            Logger.getLogger(
+                    CVDPrint.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-        public void printPatientData(CVDPatient patient)
-            throws IOException, PrinterException {
-        createPdfDocument(patient);
-        this.document.print();
-        this.document.close();
+    public void printPatientData(CVDPatient patient) {
+        try (PDDocument document = createPdfDocument(patient)) {
+            document.print();
+        } catch (PrinterException | IOException ex) {
+            Logger.getLogger(
+                    CVDPrint.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
