@@ -12,7 +12,6 @@ import gamma.cvd.calculator.print.CVDPrint;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.print.PrinterException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +25,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import org.apache.pdfbox.exceptions.COSVisitorException;
  
 /**
  *

@@ -113,7 +113,8 @@ public class PatientSelectionScreen extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         btnLoadPatient = new javax.swing.JButton();
         btnDeletePatient = new javax.swing.JButton();
@@ -127,22 +128,28 @@ public class PatientSelectionScreen extends javax.swing.JFrame {
         setTitle("Select a patient");
 
         btnLoadPatient.setText("Load Patient");
-        btnLoadPatient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnLoadPatient.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnLoadPatientActionPerformed(evt);
             }
         });
 
         btnDeletePatient.setText("Delete Patient");
-        btnDeletePatient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnDeletePatient.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnDeletePatientActionPerformed(evt);
             }
         });
 
         btnClose.setText("Close");
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnClose.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnCloseActionPerformed(evt);
             }
         });
@@ -151,8 +158,10 @@ public class PatientSelectionScreen extends javax.swing.JFrame {
         scrollPanePatients.setViewportView(listPatients);
 
         txtNameSearch.setToolTipText("");
-        txtNameSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        txtNameSearch.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 txtNameSearchActionPerformed(evt);
             }
         });
@@ -170,10 +179,10 @@ public class PatientSelectionScreen extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnLoadPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLoadPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnDeletePatient)
-                                .addGap(57, 57, 57)
+                                .addGap(24, 24, 24)
                                 .addComponent(btnClose))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblName)

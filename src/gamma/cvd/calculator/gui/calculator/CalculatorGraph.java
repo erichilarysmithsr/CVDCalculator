@@ -69,7 +69,7 @@ public class CalculatorGraph {
 
         JFreeChart lineChart = ChartFactory.createLineChart(
                 label,
-                "Dates", "Recorded Value",
+                "Assessment no.", "Recorded Value",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true, true, false);
@@ -87,17 +87,17 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        if (patient.getRiskData().size() > 4) {
-            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+        if (patient.getRiskData().size() > 20) {
+            for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
                 int score = data.calculateRiskScore();
-                dataset.addValue(data.getRiskPercentage(score), "Risk", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getRiskPercentage(score), "Risk", new Integer(i));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
                 int score = data.calculateRiskScore();
-                dataset.addValue(data.getRiskPercentage(score), "Risk", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getRiskPercentage(score), "Risk", new Integer(i));
             }
         }
 
@@ -109,15 +109,15 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        if (patient.getRiskData().size() > 4) {
-            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+        if (patient.getRiskData().size() > 20) {
+            for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", new Integer(i));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", new Integer(i));
             }
         }
 
@@ -128,15 +128,15 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        if (patient.getRiskData().size() > 4) {
-            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+        if (patient.getRiskData().size() > 20) {
+            for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", new Integer(i));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", new Integer(i));
             }
         }
 
@@ -147,15 +147,15 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        if (patient.getRiskData().size() > 4) {
-            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+        if (patient.getRiskData().size() > 20) {
+            for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", new Integer(i));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", new Integer(i));
             }
         }
 
@@ -166,15 +166,15 @@ public class CalculatorGraph {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        if (patient.getRiskData().size() > 4) {
-            for (int i = patient.getRiskData().size() - 4; i < patient.getRiskData().size(); i++) {
+        if (patient.getRiskData().size() > 20) {
+            for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", data.getTestDate() + " " + (i+1));
+                dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i));
             }
         }
 
