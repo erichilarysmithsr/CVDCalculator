@@ -91,13 +91,13 @@ public class CalculatorGraph {
             for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
                 int score = data.calculateRiskScore();
-                dataset.addValue(data.getRiskPercentage(score), "Risk", new Integer(i));
+                dataset.addValue(data.getRiskPercentage(score), "Risk", new Integer(i+1));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
                 int score = data.calculateRiskScore();
-                dataset.addValue(data.getRiskPercentage(score), "Risk", new Integer(i));
+                dataset.addValue(data.getRiskPercentage(score), "Risk", new Integer(i+1));
             }
         }
 
@@ -112,12 +112,12 @@ public class CalculatorGraph {
         if (patient.getRiskData().size() > 20) {
             for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", new Integer(i));
+                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", new Integer(i+1));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", new Integer(i));
+                dataset.addValue(data.getCholesterolMmolL(), "Cholesterol MMoL", new Integer(i+1));
             }
         }
 
@@ -131,12 +131,12 @@ public class CalculatorGraph {
         if (patient.getRiskData().size() > 20) {
             for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", new Integer(i));
+                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", new Integer(i+1));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", new Integer(i));
+                dataset.addValue(data.getHdlMmolL(), "Hdl MMoL", new Integer(i+1));
             }
         }
 
@@ -150,12 +150,12 @@ public class CalculatorGraph {
         if (patient.getRiskData().size() > 20) {
             for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", new Integer(i));
+                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", new Integer(i+1));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
                 CVDRiskData data = patient.getRiskData().get(i);
-                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", new Integer(i));
+                dataset.addValue(data.getBloodPressureSystolicMmHg(), "Blood Pressure (Systolic) (MmHg)", new Integer(i+1));
             }
         }
 
@@ -168,12 +168,12 @@ public class CalculatorGraph {
 
         if (patient.getRiskData().size() > 20) {
             for (int i = patient.getRiskData().size() - 20; i < patient.getRiskData().size(); i++) {
-                CVDRiskData data = patient.getRiskData().get(i);
+                CVDRiskData data = patient.getRiskData().get(i+1);
                 dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i));
             }
         } else {
             for (int i = 0; i < patient.getRiskData().size(); i++) {
-                CVDRiskData data = patient.getRiskData().get(i);
+                CVDRiskData data = patient.getRiskData().get(i+1);
                 dataset.addValue(data.getBloodPressureDiastolicMmHg(), "Blood Pressure (Diastolic) (MmHg)", new Integer(i));
             }
         }

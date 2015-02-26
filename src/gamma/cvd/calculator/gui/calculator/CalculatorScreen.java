@@ -921,7 +921,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
 
     private void loadPreviousAssessmentDates() {
         patient.getRiskData().stream().forEach((data) -> {
-            comboAssessmentDate.addItem(data.getTestDate().toString() + ": Assessment " + data.getTestId());
+            comboAssessmentDate.addItem(data.getTestDate().toString() + ": " + data.getTestId());
         });
 
         comboAssessmentDate.addActionListener((ActionEvent e) -> {
@@ -930,7 +930,6 @@ public class CalculatorScreen extends javax.swing.JFrame {
                 if (comboAssessmentDate.getSelectedIndex() > 0)
                 {
                     String selection = comboAssessmentDate.getSelectedItem().toString();
-                    selection = selection.replace("Assessment", "");
                     String[] selectionData = selection.split(":");
 
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
