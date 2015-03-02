@@ -37,17 +37,18 @@ public class CVDPrint {
     public CVDPrint() {
     }
     
-    private void writeLine(String left, String right, PDPageContentStream cos,
-            float space) throws IOException {
-        cos.beginText();
-        cos.moveTextPositionByAmount(leftMargin, space - lineSpace * ++line);
+    private void writeLine(String left, String right,
+            PDPageContentStream contentStream, float space) throws IOException {
+        contentStream.beginText();
+        contentStream.moveTextPositionByAmount(leftMargin,
+                space - lineSpace * ++line);
         int lead = 54 - (left.length() + right.length());
-        cos.drawString(left + " ");
+        contentStream.drawString(left + " ");
         for (int i = 0; i < lead; i++) {
-            cos.drawString(".");
+            contentStream.drawString(".");
         }
-        cos.drawString(" " + right);
-        cos.endText();
+        contentStream.drawString(" " + right);
+        contentStream.endText();
     }
     
     private PDDocument createPdfDocument(CVDPatient patient)
@@ -61,109 +62,111 @@ public class CVDPrint {
         PDFont fontHelveticaBold = PDType1Font.HELVETICA_BOLD;
         PDFont fontCourier = PDType1Font.COURIER;
         PDFont fontCourierBold = PDType1Font.COURIER_BOLD;
-        PDPageContentStream cos =
+        PDPageContentStream contentStream =
                 new PDPageContentStream(document, pageList.get(0));
         line = 0;
-        cos.beginText();
-        cos.setFont(fontHelveticaBold, 18);
-        cos.moveTextPositionByAmount(leftMargin,
+        contentStream.beginText();
+        contentStream.setFont(fontHelveticaBold, 18);
+        contentStream.moveTextPositionByAmount(leftMargin,
                 rect.getHeight() - initialLineSpace);
-        cos.drawString("Test record for " + patient.getFirstName() + " " +
-                patient.getLastName());
-        cos.endText();
+        contentStream.drawString("Test record for " + patient.getFirstName() +
+                " " + patient.getLastName());
+        contentStream.endText();
         
-        cos.setFont(fontCourier, 12);
-        writeLine("Patient no.:", String.valueOf(patient.getPatientId()), cos,
+        contentStream.setFont(fontCourier, 12);
+        writeLine("Patient no.:", String.valueOf(patient.getPatientId()),
+                contentStream, rect.getHeight() - patientLineSpace);
+        
+        writeLine("First name:", patient.getFirstName(), contentStream,
                 rect.getHeight() - patientLineSpace);
         
-        writeLine("First name:", patient.getFirstName(), cos,
+        writeLine("Last name:", patient.getLastName(), contentStream,
                 rect.getHeight() - patientLineSpace);
         
-        writeLine("Last name:", patient.getLastName(), cos,
-                rect.getHeight() - patientLineSpace);
+        writeLine("Date of birth:", patient.getBirthdate().toString(),
+                contentStream, rect.getHeight() - patientLineSpace);
         
-        writeLine("Date of birth:", patient.getBirthdate().toString(), cos,
-                rect.getHeight() - patientLineSpace);
-        
-        writeLine("Sex:", String.valueOf(patient.getSex()), cos,
+        writeLine("Sex:", String.valueOf(patient.getSex()), contentStream,
                 rect.getHeight() - patientLineSpace);
         int n = 0;
         for (CVDRiskData data : patient.getRiskData()) {
             if (n > 0 && n % 3 == 0) {
-                cos.close();
+                contentStream.close();
                 PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
                 pageList.add(page);
                 document.addPage(pageList.get(n/3));
-                cos = new PDPageContentStream(document, pageList.get(n/3));
+                contentStream = 
+                        new PDPageContentStream(document, pageList.get(n/3));
                 line = 0;
-                cos.beginText();
-                cos.setFont(fontHelveticaBold, 18);
-                cos.moveTextPositionByAmount(leftMargin,
+                contentStream.beginText();
+                contentStream.setFont(fontHelveticaBold, 18);
+                contentStream.moveTextPositionByAmount(leftMargin,
                         rect.getHeight() - initialLineSpace);
-                cos.drawString("Test record for " + patient.getFirstName() +
-                        " " + patient.getLastName() + ", page " + ((n/3) + 1));
-                cos.endText();
+                contentStream.drawString("Test record for " +
+                        patient.getFirstName() + " " + patient.getLastName() + 
+                        ", page " + ((n/3) + 1));
+                contentStream.endText();
             }
-            cos.beginText();
-            cos.moveTextPositionByAmount(leftMargin,
+            contentStream.beginText();
+            contentStream.moveTextPositionByAmount(leftMargin,
                     rect.getHeight() - testDataLineSpace - lineSpace * ++line);
-            cos.endText();
+            contentStream.endText();
             
-            cos.setFont(fontCourierBold, 12);
-            writeLine("Test ID:", String.valueOf(data.getTestId()), cos,
-                    rect.getHeight() - testDataLineSpace);
+            contentStream.setFont(fontCourierBold, 12);
+            writeLine("Test ID:", String.valueOf(data.getTestId()),
+                    contentStream, rect.getHeight() - testDataLineSpace);
             
-            cos.setFont(fontCourier, 12);
-            writeLine("Test date:", data.getTestDate().toString(), cos,
-                    rect.getHeight() - testDataLineSpace);
+            contentStream.setFont(fontCourier, 12);
+            writeLine("Test date:", data.getTestDate().toString(),
+                    contentStream, rect.getHeight() - testDataLineSpace);
             
-            writeLine("Cholesterol type:", data.getCholesterolType(), cos,
-                    rect.getHeight() - testDataLineSpace);
+            writeLine("Cholesterol type:", data.getCholesterolType(),
+                    contentStream, rect.getHeight() - testDataLineSpace);
             
             writeLine("Cholesterol mmol/L:",
-                    String.format("%.2f", data.getCholesterolMmolL()), cos,
-                    rect.getHeight() - testDataLineSpace);
+                    String.format("%.2f", data.getCholesterolMmolL()),
+                    contentStream, rect.getHeight() - testDataLineSpace);
             
             writeLine("HDL mmol/L:",
-                    String.format("%.2f", data.getHdlMmolL()), cos,
+                    String.format("%.2f", data.getHdlMmolL()), contentStream,
                     rect.getHeight() - testDataLineSpace);
             
             writeLine("Diastolic blood pressure:",
-                    String.valueOf(data.getBloodPressureDiastolicMmHg()), cos,
-                    rect.getHeight() - testDataLineSpace);
+                    String.valueOf(data.getBloodPressureDiastolicMmHg()),
+                    contentStream, rect.getHeight() - testDataLineSpace);
             
             writeLine("Systolic blood pressure:", 
-                    String.valueOf(data.getBloodPressureSystolicMmHg()), cos,
-                    rect.getHeight() - testDataLineSpace);
+                    String.valueOf(data.getBloodPressureSystolicMmHg()),
+                    contentStream, rect.getHeight() - testDataLineSpace);
             
             if (data.isSmoker()) {
-                writeLine("Patient is smoker:", "Yes", cos,
+                writeLine("Patient is smoker:", "Yes", contentStream,
                     rect.getHeight() - testDataLineSpace);
             } else {
-                writeLine("Patient is smoker:", "No", cos,
+                writeLine("Patient is smoker:", "No", contentStream,
                     rect.getHeight() - testDataLineSpace);
             }
             
             if (data.isDiabetic()) {
-                writeLine("Patient is diabetic:", "Yes", cos,
+                writeLine("Patient is diabetic:", "Yes", contentStream,
                     rect.getHeight() - testDataLineSpace);
             } else {
-                writeLine("Patient is diabetic:", "No", cos,
+                writeLine("Patient is diabetic:", "No", contentStream,
                     rect.getHeight() - testDataLineSpace);
             }
             
             int score = data.calculateRiskScore();
-            writeLine("Risk score:", String.valueOf(score), cos,
+            writeLine("Risk score:", String.valueOf(score), contentStream,
                     rect.getHeight() - testDataLineSpace);
             
             int riskPercentage = data.getRiskPercentage(score);
             writeLine("Risk percentage:",
                     new StringBuilder().append(riskPercentage).append(" %")
-                            .toString() , cos,
+                            .toString() , contentStream,
                     rect.getHeight() - testDataLineSpace);
             n++;
         }
-        cos.close();
+        contentStream.close();
         return document;
     }
     
