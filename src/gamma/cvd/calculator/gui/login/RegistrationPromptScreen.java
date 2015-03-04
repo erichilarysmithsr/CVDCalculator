@@ -231,9 +231,16 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
                else
                {
                 // Call Registration Method with username & password
-                auth.createNewUser(username, password, title, firstName, firstName, emailAddress);
-                JOptionPane.showMessageDialog(this, "Account was succesfully registered, you may now login with your new details", "Succesful Registration", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
+                boolean registrationSuccesful = auth.createNewUser(username, password, title, firstName, firstName, emailAddress);
+                if (registrationSuccesful)
+                {
+                    JOptionPane.showMessageDialog(this, "Account was succesfully registered, you may now login with your new details", "Succesful Registration", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                }
+                else
+                {
+                     JOptionPane.showMessageDialog(this, "Account username already taken, please choose another username", "Registration Failed", JOptionPane.ERROR_MESSAGE);                   
+                }
                }
            } catch (InvalidKeySpecException ex) {
                Logger.getLogger(RegistrationPromptScreen.class.getName()).log(Level.SEVERE, null, ex);

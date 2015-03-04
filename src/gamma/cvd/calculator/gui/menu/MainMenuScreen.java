@@ -6,6 +6,12 @@
 package gamma.cvd.calculator.gui.menu;
 
 import gamma.cvd.calculator.gui.GuiUtils;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -19,8 +25,19 @@ public class MainMenuScreen extends javax.swing.JFrame
      */
     public MainMenuScreen()
     {
-        initComponents();
-        GuiUtils.centerScreen(this);
+        try
+        {
+            final String WORK_DIR = System.getProperty("user.dir");
+            final String ICON_DIR = "/resources/icons/";
+
+            initComponents();
+
+            imgMainMenuIcon.setIcon(new ImageIcon(ImageIO.read(new File(WORK_DIR + ICON_DIR + "logo.png"))));
+            GuiUtils.centerScreen(this);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainMenuScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -30,7 +47,8 @@ public class MainMenuScreen extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         imgLoginIcon = new javax.swing.JLabel();
         btnNewPatient = new javax.swing.JButton();
@@ -44,20 +62,23 @@ public class MainMenuScreen extends javax.swing.JFrame
         setTitle("NHS CVD Calculator - Menu");
 
         btnNewPatient.setText("New Patient");
-        btnNewPatient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnNewPatient.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnNewPatientActionPerformed(evt);
             }
         });
 
-        btnExistingPatient.setText("Existing Patient");
-        btnExistingPatient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnExistingPatient.setText("Load Patient");
+        btnExistingPatient.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnExistingPatientActionPerformed(evt);
             }
         });
 
-        imgMainMenuIcon.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jack\\Documents\\GitHub\\CVDCalculator\\resources\\icons\\logo.png")); // NOI18N
         imgMainMenuIcon.setName("imgCalculatorIcon"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -82,7 +103,7 @@ public class MainMenuScreen extends javax.swing.JFrame
                 .addComponent(btnNewPatient)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnExistingPatient)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         pack();
@@ -90,11 +111,11 @@ public class MainMenuScreen extends javax.swing.JFrame
 
     private void btnNewPatientActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnNewPatientActionPerformed
     {//GEN-HEADEREND:event_btnNewPatientActionPerformed
-        new PatientRegistrationScreen().setVisible(true);          
+        new PatientRegistrationScreen().setVisible(true);
     }//GEN-LAST:event_btnNewPatientActionPerformed
 
     private void btnExistingPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExistingPatientActionPerformed
-       new PatientSelectionScreen().setVisible(true);
+        new PatientSelectionScreen().setVisible(true);
     }//GEN-LAST:event_btnExistingPatientActionPerformed
 
     /**
