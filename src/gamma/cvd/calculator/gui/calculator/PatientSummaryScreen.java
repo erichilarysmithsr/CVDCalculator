@@ -37,14 +37,16 @@ public class PatientSummaryScreen extends javax.swing.JFrame
         
     PatientSummaryScreen(CVDRiskData model, CVDPatient patient) 
     {
+        initComponents();
+
         this.patient = patient;
         
         GuiUtils.centerScreen(this);
-        initComponents();
-        lblNamePlaceholder.setText(patient.getFirstName()+" "+patient.getLastName());
+
         DisplayHealthTips(model);
         DisplaySummary(model);
 
+        lblNamePlaceholder.setText(patient.getFirstName()+" "+patient.getLastName());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 

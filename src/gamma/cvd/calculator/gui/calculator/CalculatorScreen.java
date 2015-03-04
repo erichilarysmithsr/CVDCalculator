@@ -169,8 +169,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
         boolean isDiabetic;
         boolean isSmoker;
 
-        cholesterolMeasurement
-                = comboCholesterolMeasurement.getSelectedItem().toString();
+        cholesterolMeasurement = comboCholesterolMeasurement.getSelectedItem().toString();
         hdlMeasurement = comboHdlcMeasurement.getSelectedItem().toString();
 
         if (radioGenderFemale.isSelected()) {
