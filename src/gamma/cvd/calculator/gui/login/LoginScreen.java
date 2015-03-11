@@ -4,6 +4,7 @@ import gamma.cvd.calculator.gui.GuiUtils;
 import gamma.cvd.calculator.gui.menu.MainMenuScreen;
 import gamma.cvd.login.CVDLogin;
 import gamma.cvd.login.PasswordHash;
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +12,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.xml.xpath.XPathExpressionException;
 import org.xml.sax.SAXException;
@@ -29,11 +33,15 @@ public class LoginScreen extends javax.swing.JFrame
      */
     public LoginScreen()
     {
+        final String WORK_DIR = System.getProperty("user.dir");
+        final String ICON_DIR = "/resources/icons/";
+        
         try {
             this.auth = new CVDLogin();
             
             initComponents();
             
+            imgLoginIcon.setIcon(new ImageIcon(ImageIO.read(new File(WORK_DIR + ICON_DIR + "logo.png"))));
             
             GuiUtils.setNativeGuiStyle(this);
             
@@ -113,7 +121,6 @@ public class LoginScreen extends javax.swing.JFrame
 
         txtLoginPassword.setName("txtLoginPassword"); // NOI18N
 
-        imgLoginIcon.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jack\\Documents\\GitHub\\CVDCalculator\\resources\\icons\\logo.png")); // NOI18N
         imgLoginIcon.setName("imgCalculatorIcon"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -121,34 +128,32 @@ public class LoginScreen extends javax.swing.JFrame
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnAccessRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnAccessRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblLoginPassword)
                             .addComponent(lblLoginUsername))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtLoginUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(txtLoginPassword))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLoginPassword)
+                            .addComponent(txtLoginUsername))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(imgLoginIcon)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addGap(72, 72, 72))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addComponent(imgLoginIcon)
-                .addGap(32, 32, 32)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLoginUsername)
                     .addComponent(txtLoginUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -160,7 +165,7 @@ public class LoginScreen extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAccessRegistration)
                     .addComponent(btnLogin))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         pack();

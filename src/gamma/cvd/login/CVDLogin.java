@@ -147,7 +147,7 @@ public class CVDLogin {
             firstnameElement.appendChild(this.userDB.createTextNode(firstname));
             userElement.appendChild(firstnameElement);
 
-            Element lastnameElement = this.userDB.createElement("FirstName");
+            Element lastnameElement = this.userDB.createElement("LastName");
             lastnameElement.appendChild(this.userDB.createTextNode(lastname));
             userElement.appendChild(lastnameElement);
 

@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +55,12 @@ public class CalculatorScreen extends javax.swing.JFrame {
             this.graph = new CalculatorGraph(panelGraph, patient, comboStaticOption);                        
             graph.DrawRiskGraph();
             lblNamePlaceholder.setText(patient.getFirstName()+" "+patient.getLastName());
+            
+            Integer age = Period.between(patient.getBirthdate(), LocalDate.now()).getYears();
+
+            txtAge.setText(age.toString());
+            sliderAge.setValue(age);
+            
             if (patient.getRiskData().size() > 0) {
                 comboCholesterolMeasurement.setSelectedIndex(1);
                 comboHdlcMeasurement.setSelectedIndex(1);
@@ -162,8 +169,7 @@ public class CalculatorScreen extends javax.swing.JFrame {
         boolean isDiabetic;
         boolean isSmoker;
 
-        cholesterolMeasurement
-                = comboCholesterolMeasurement.getSelectedItem().toString();
+        cholesterolMeasurement = comboCholesterolMeasurement.getSelectedItem().toString();
         hdlMeasurement = comboHdlcMeasurement.getSelectedItem().toString();
 
         if (radioGenderFemale.isSelected()) {
@@ -917,6 +923,8 @@ public class CalculatorScreen extends javax.swing.JFrame {
     }
 
     private void loadPreviousAssessmentDates() {
+        comboAssessmentDate.removeAll();
+            
         patient.getRiskData().stream().forEach((data) -> {
             comboAssessmentDate.addItem(data.getTestDate().toString() + ": " + data.getTestId());
         });
