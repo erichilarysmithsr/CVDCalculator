@@ -231,7 +231,7 @@ public class RegistrationPromptScreen extends javax.swing.JFrame
                else
                {
                 // Call Registration Method with username & password
-                auth.createNewUser(username, password, title, firstName, firstName, emailAddress);
+                auth.createNewUser(username, password, title, firstName, secondName, emailAddress);
                 JOptionPane.showMessageDialog(this, "Account was succesfully registered, you may now login with your new details", "Succesful Registration", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
                }
