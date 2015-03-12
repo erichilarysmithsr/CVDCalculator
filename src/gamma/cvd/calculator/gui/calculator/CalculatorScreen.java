@@ -912,7 +912,6 @@ public class CalculatorScreen extends javax.swing.JFrame {
         });
 
         comboAssessmentDate.addActionListener((ActionEvent e) -> {
-            comboAssessmentDate.removeAllItems();
             firstLoad = true;
             patient.getRiskData().stream().forEach((data) -> {
                 if (comboAssessmentDate.getSelectedIndex() > 0)
